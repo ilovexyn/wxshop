@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyuan.wxshop.mapper.OrderRecordsDetailsMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zhuoyuan.wxshop.model.OrderRecordsDetails">
+        <id column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="goods_id" property="goodsId" />
+        <result column="num" property="num" />
+        <result column="price" property="price" />
+        <result column="ct" property="ct" />
+        <result column="ut" property="ut" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_id, goods_id, num, price, ct, ut
+    </sql>
+
+</mapper>

@@ -8,8 +8,12 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.zhuoyuan.wxshop.model.UserAddress">
         <result column="id" property="id" />
-        <result column="address_info" property="addressInfo" />
+        <result column="name" property="name" />
         <result column="mobile" property="mobile" />
+        <result column="city" property="city" />
+        <result column="address_detail" property="addressDetail" />
+        <result column="address_info" property="addressInfo" />
+        <result column="state" property="state" />
         <result column="openid" property="openid" />
         <result column="ct" property="ct" />
         <result column="ut" property="ut" />
@@ -17,7 +21,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, address_info, mobile, openid, ct, ut
+        id, address_info, mobile, ct, ut,name,city,address_detail,state,openid
     </sql>
 
 </mapper>

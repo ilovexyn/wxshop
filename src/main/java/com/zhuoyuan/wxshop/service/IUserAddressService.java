@@ -2,6 +2,7 @@ package com.zhuoyuan.wxshop.service;
 
 import com.zhuoyuan.wxshop.model.UserAddress;
 import com.baomidou.mybatisplus.service.IService;
+import com.zhuoyuan.wxshop.request.Result;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface IUserAddressService extends IService<UserAddress> {
 
+    Result updateState(UserAddress userAddress);
 }

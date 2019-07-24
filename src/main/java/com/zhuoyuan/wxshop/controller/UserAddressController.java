@@ -29,6 +29,7 @@ public class UserAddressController {
 
     @PostMapping(value = "/userAddress")
     public Result saveUserAddress(@RequestBody UserAddress userAddress){
+        userAddress.setAddressInfo(userAddress.getCity()+ userAddress.getAddressDetail());
         boolean flag = userAddressService.insert(userAddress);
         if(flag){
             return Result.success();
@@ -37,11 +38,25 @@ public class UserAddressController {
         }
     }
 
-    @GetMapping(value = "/userAddress")
-    public Result getList(@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size,@PathVariable("id") Long id){
+    @GetMapping(value = "/userAddress/{openid}")
+    public Result getList(@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size,@PathVariable("openid") String openid){
         EntityWrapper<UserAddress> userAddressEntityWrapper = new EntityWrapper<>();
+        userAddressEntityWrapper.eq("openid",openid);
         Page page = new Page<Goods>(current, size);
         return  Result.success( userAddressService.selectPage(page,userAddressEntityWrapper));
+    }
+
+    @GetMapping(value = "/userAddress/one")
+    public Result getList( @RequestParam(value ="state") int state,@RequestParam(value ="openid") String openid){
+        EntityWrapper<UserAddress> userAddressEntityWrapper = new EntityWrapper<>();
+        userAddressEntityWrapper.eq("openid",openid);
+        userAddressEntityWrapper.eq("state",state);
+        return  Result.success( userAddressService.selectOne(userAddressEntityWrapper));
+    }
+
+    @PutMapping(value = "/userAddress")
+    public Result getList(@RequestBody UserAddress userAddress){
+        return userAddressService.updateState(userAddress);
     }
 }
 

@@ -9,12 +9,9 @@ import com.zhuoyuan.wxshop.service.IOrderRecordsService;
 import com.zhuoyuan.wxshop.service.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -40,7 +37,17 @@ public class OrderRecordsController {
             e.printStackTrace();
             return Result.failure(ResponseCode.ERROR_500,e.getMessage());
         }
+    }
 
+    @GetMapping(value = "/order/orderRecords")
+    public Result getOrder(@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size,String openid,int state){
+        try{
+            return orderRecordsService.getOrder(current,size,openid,state);
+        }catch (Exception e){
+            log.error("OrderRecordsController-saveOrder:"+e.getMessage());
+            e.printStackTrace();
+            return Result.failure(ResponseCode.ERROR_500,e.getMessage());
+        }
     }
 }
 

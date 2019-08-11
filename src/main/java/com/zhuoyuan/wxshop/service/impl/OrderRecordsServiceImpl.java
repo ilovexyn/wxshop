@@ -1,5 +1,9 @@
 package com.zhuoyuan.wxshop.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.zhuoyuan.wxshop.dto.GetOrderDetailRequest;
+import com.zhuoyuan.wxshop.dto.GetOrderRequest;
 import com.zhuoyuan.wxshop.dto.OrderRequest;
 import com.zhuoyuan.wxshop.model.Goods;
 import com.zhuoyuan.wxshop.model.OrderRecords;
@@ -16,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -35,6 +41,8 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
     IOrderRecordsDetailsService orderRecordsDetailsService;
     @Autowired
     IGoodsService goodsService;
+    @Autowired
+    OrderRecordsMapper orderRecordsMapper;
 
     @Override
     @Transactional
@@ -70,5 +78,45 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
         orderRecordsDetailsService.insert(orderRecordsDetails);
 
         return Result.success();
+    }
+
+    @Override
+    public Result getOrder(int current, int size, String openid,int state) {
+        Page<GetOrderRequest> getOrderRequestPage = new Page<GetOrderRequest>(current, size);
+        List<GetOrderRequest> getOrderRequestList = new ArrayList<>();
+
+        EntityWrapper<OrderRecords> orderRecordsEntityWrapper = new EntityWrapper<>();
+        orderRecordsEntityWrapper.eq("state",state);
+        orderRecordsEntityWrapper.eq("openid",openid);
+
+        List<OrderRecords> orderRequestList = orderRecordsMapper.selectPage(getOrderRequestPage,orderRecordsEntityWrapper);
+
+        for(OrderRecords orderRecords:orderRequestList){
+            GetOrderRequest getOrderRequest = new GetOrderRequest();
+            int goodsCount = 0;
+            EntityWrapper<OrderRecordsDetails> entityWrapper = new EntityWrapper<>();
+            entityWrapper.eq("order_id",orderRecords.getId());
+            List<OrderRecordsDetails> orderRecordsDetails = orderRecordsDetailsService.selectList(entityWrapper);
+            List<GetOrderDetailRequest> getOrderDetailRequestList = new ArrayList<>();
+            for(OrderRecordsDetails torderRecordsDetails:orderRecordsDetails){
+                GetOrderDetailRequest getOrderDetailRequest = new GetOrderDetailRequest();
+                getOrderDetailRequest.setCount(torderRecordsDetails.getNum());
+                Goods goods =goodsService.selectById(torderRecordsDetails.getGoodsId());
+                getOrderDetailRequest.setName(goods.getName());
+                getOrderDetailRequest.setImageUrl(goods.getImageurl());
+                getOrderDetailRequest.setPrice(goods.getPrice());
+                getOrderDetailRequest.setPrice(goods.getPrice());
+                goodsCount = goodsCount+torderRecordsDetails.getNum();
+                getOrderDetailRequestList.add(getOrderDetailRequest);
+            }
+            getOrderRequest.setOrdercode(orderRecords.getOrdercode());
+            getOrderRequest.setId(orderRecords.getId());
+            getOrderRequest.setGoodsCount(goodsCount);
+            getOrderRequest.setGetOrderDetailRequestList(getOrderDetailRequestList);
+            getOrderRequestList.add(getOrderRequest);
+        }
+
+        getOrderRequestPage.setRecords(getOrderRequestList);
+        return Result.success(getOrderRequestPage);
     }
 }

@@ -7,6 +7,7 @@ import com.zhuoyuan.wxshop.mapper.UserInfoMapper;
 import com.zhuoyuan.wxshop.request.Result;
 import com.zhuoyuan.wxshop.service.IUserInfoService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.zhuoyuan.wxshop.status.WxInfo;
 import com.zhuoyuan.wxshop.utils.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public Result getWxuser(String code) {
-        String appId ="wx12fee77b24ac4a51";
-        String secret ="431be374f821923354e50b53bfeda46b";
+        String appId = WxInfo.appId;
+        String secret =WxInfo.secret;
         String js_code =code;
         String grant_type ="authorization_code";
-        String url = "https://api.weixin.qq.com/sns/jscode2session";
+        String url = WxInfo.jscode2sessionUrl;
         url=url+"?appid="+appId;
         url=url+"&secret="+secret;
         url=url+"&js_code="+js_code;

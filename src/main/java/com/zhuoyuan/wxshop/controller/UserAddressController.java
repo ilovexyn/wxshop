@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
  * @since 2019-07-08
  */
 @RestController
+@RequestMapping(value = "/api/wxserve")
 public class UserAddressController {
 
     @Autowired

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Controller;
  */
 @RestController
 @Slf4j
+@RequestMapping(value = "/api/wxserve")
 public class OrderRecordsController {
 
     @Autowired

@@ -57,6 +57,8 @@ public class OrderRecords implements Serializable {
      */
     private BigDecimal sumPrice;
 
+    private String appraise;
+
     @Override
     public String toString() {
         return "OrderRecords{" +

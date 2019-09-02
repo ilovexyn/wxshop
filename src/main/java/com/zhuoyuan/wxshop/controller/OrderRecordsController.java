@@ -2,6 +2,7 @@ package com.zhuoyuan.wxshop.controller;
 
 
 import com.zhuoyuan.wxshop.dto.OrderRequest;
+import com.zhuoyuan.wxshop.model.OrderRecords;
 import com.zhuoyuan.wxshop.model.UserInfo;
 import com.zhuoyuan.wxshop.request.ResponseCode;
 import com.zhuoyuan.wxshop.request.Result;
@@ -45,9 +46,31 @@ public class OrderRecordsController {
         try{
             return orderRecordsService.getOrder(current,size,openid,state);
         }catch (Exception e){
-            log.error("OrderRecordsController-saveOrder:"+e.getMessage());
+            log.error("OrderRecordsController-getOrder:"+e.getMessage());
             e.printStackTrace();
             return Result.failure(ResponseCode.ERROR_500,e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/order/orderRecords")
+    public Result updateOrder(@RequestBody OrderRecords orderRecords){
+        try{
+            return orderRecordsService.updateOrder(orderRecords);
+        }catch (Exception e){
+            log.error("OrderRecordsController-updateOrder:"+e.getMessage());
+            e.printStackTrace();
+            return Result.failure(ResponseCode.ERROR_500,e.getMessage());
+        }
+    }
+
+    //邮件更改状态
+    @GetMapping(value = "/order/updateOrderByMail")
+    public void updateOrderByMail(Long orderId){
+        try{
+             orderRecordsService.updateOrderByMail(orderId);
+        }catch (Exception e){
+            log.error("OrderRecordsController-updateOrderByMail:"+e.getMessage());
+            e.printStackTrace();
         }
     }
 }

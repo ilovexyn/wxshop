@@ -17,11 +17,12 @@
         <result column="ut" property="ut" />
         <result column="ordercode" property="ordercode" />
         <result column="sum_price" property="sumPrice" />
+        <result column="appraise" property="appraise" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, openid, state, address_id, express_code, type, ct, ut, ordercode, sum_price
+        id, openid, state, address_id, express_code, type, ct, ut, ordercode, sum_price,appraise
     </sql>
 
 </mapper>

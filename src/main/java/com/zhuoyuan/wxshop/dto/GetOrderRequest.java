@@ -9,5 +9,6 @@ import java.util.List;
 public class GetOrderRequest extends OrderRecords {
 
     private Integer goodsCount;
+    private Integer state;
     private List<GetOrderDetailRequest> getOrderDetailRequestList;
 }

@@ -18,4 +18,8 @@ public interface IOrderRecordsService extends IService<OrderRecords> {
     Result save(OrderRequest orderRequest) throws Exception;
 
     Result getOrder(int current,int size,String openid,int state);
+
+    Result updateOrder(OrderRecords orderRecords) throws Exception;
+
+    void updateOrderByMail(Long orderId);
 }

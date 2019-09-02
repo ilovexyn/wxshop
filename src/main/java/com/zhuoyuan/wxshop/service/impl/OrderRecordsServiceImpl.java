@@ -1,5 +1,6 @@
 package com.zhuoyuan.wxshop.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.zhuoyuan.wxshop.dto.GetOrderDetailRequest;
@@ -9,12 +10,12 @@ import com.zhuoyuan.wxshop.model.Goods;
 import com.zhuoyuan.wxshop.model.OrderRecords;
 import com.zhuoyuan.wxshop.mapper.OrderRecordsMapper;
 import com.zhuoyuan.wxshop.model.OrderRecordsDetails;
+import com.zhuoyuan.wxshop.model.UserAddress;
 import com.zhuoyuan.wxshop.request.Result;
-import com.zhuoyuan.wxshop.service.IGoodsService;
-import com.zhuoyuan.wxshop.service.IOrderRecordsDetailsService;
-import com.zhuoyuan.wxshop.service.IOrderRecordsService;
+import com.zhuoyuan.wxshop.service.*;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.zhuoyuan.wxshop.status.GoodsStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ import java.util.List;
  * @since 2019-06-30
  */
 @Service
+@Slf4j
 public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, OrderRecords> implements IOrderRecordsService {
 
     @Autowired
@@ -43,10 +45,15 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
     IGoodsService goodsService;
     @Autowired
     OrderRecordsMapper orderRecordsMapper;
+    @Autowired
+    MailService mailService;
+    @Autowired
+    IUserAddressService userAddressService;
 
     @Override
     @Transactional
     public Result save(OrderRequest orderRequest) throws Exception {
+        log.info("OrderRecordsServiceImpl -- save:"+JSONObject.toJSONString(orderRequest));
         String orderCode = String.valueOf( System.currentTimeMillis())+orderRequest.getOpenid();
         Goods goods = goodsService.selectById(orderRequest.getGoodsId());
         if(goods == null){
@@ -82,11 +89,14 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
 
     @Override
     public Result getOrder(int current, int size, String openid,int state) {
+        log.info("OrderRecordsServiceImpl -- getOrder:"+"openid:"+openid+",state:"+state);
         Page<GetOrderRequest> getOrderRequestPage = new Page<GetOrderRequest>(current, size);
         List<GetOrderRequest> getOrderRequestList = new ArrayList<>();
 
         EntityWrapper<OrderRecords> orderRecordsEntityWrapper = new EntityWrapper<>();
-        orderRecordsEntityWrapper.eq("state",state);
+        if(0 != state){
+            orderRecordsEntityWrapper.eq("state",state);
+        }
         orderRecordsEntityWrapper.eq("openid",openid);
 
         List<OrderRecords> orderRequestList = orderRecordsMapper.selectPage(getOrderRequestPage,orderRecordsEntityWrapper);
@@ -109,8 +119,10 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
                 goodsCount = goodsCount+torderRecordsDetails.getNum();
                 getOrderDetailRequestList.add(getOrderDetailRequest);
             }
+            getOrderRequest.setState(orderRecords.getState());
             getOrderRequest.setOrdercode(orderRecords.getOrdercode());
             getOrderRequest.setId(orderRecords.getId());
+            getOrderRequest.setSumPrice(orderRecords.getSumPrice());
             getOrderRequest.setGoodsCount(goodsCount);
             getOrderRequest.setGetOrderDetailRequestList(getOrderDetailRequestList);
             getOrderRequestList.add(getOrderRequest);
@@ -118,5 +130,51 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
 
         getOrderRequestPage.setRecords(getOrderRequestList);
         return Result.success(getOrderRequestPage);
+    }
+
+    @Override
+    public Result updateOrder(OrderRecords orderRecords) throws Exception {
+        log.info("OrderRecordsServiceImpl -- updateOrder:"+JSONObject.toJSONString(orderRecords));
+        OrderRecords torderRecords = orderRecordsService.selectById(orderRecords.getId());
+        String content = this.getOrderInfo(torderRecords);
+        if(orderRecords.getState() == 1){//支付完成 变成 代发货
+            orderRecords.setState(2);
+            mailService.sendHtmlMail("13718478366@163.com", "订单号："+torderRecords.getOrdercode(), content);
+        }else if(orderRecords.getState() == 3){//待收货变为收货 订单完成
+            orderRecords.setState(4);
+        }else if(orderRecords.getState() == 2){//待收货变为收货 订单完成
+            //发送邮件提醒发货
+            mailService.sendHtmlMail("13718478366@163.com", "订单号："+torderRecords.getOrdercode(), content);
+
+        }
+        orderRecords.setUt(new Date());
+        orderRecordsService.updateById(orderRecords);
+        return Result.success();
+    }
+
+    private String getOrderInfo(OrderRecords torderRecords){
+        //拼装订单信息
+        String content = "";
+        EntityWrapper<OrderRecordsDetails> orderRecordsDetailsEntityWrapper = new EntityWrapper<>();
+        orderRecordsDetailsEntityWrapper.eq("order_id",torderRecords.getId());
+        List<OrderRecordsDetails> orderRecordsDetailsList = orderRecordsDetailsService.selectList(orderRecordsDetailsEntityWrapper);
+        for(OrderRecordsDetails orderRecordsDetails:orderRecordsDetailsList){
+            Goods goods = goodsService.selectById(orderRecordsDetails.getGoodsId());
+            content = content +"商品："+goods.getName()+"；数量："+orderRecordsDetails.getNum();
+        }
+        String addressInfo = "";
+        UserAddress userAddress = userAddressService.selectById(torderRecords.getAddressId());
+        addressInfo = "  姓名："+userAddress.getName()+"手机号："+userAddress.getMobile()+"地址:"+userAddress.getAddressInfo();
+        content = content+addressInfo;
+        String url ="https://www.1000000tao.com/api/wxserve/order/updateOrderByMail?orderId=\"+torderRecords.getId()" ;
+        content = content+"操作:"+"<a href='"+url+"'";
+        return content;
+    }
+
+    @Override
+    public void updateOrderByMail(Long orderId) {
+        OrderRecords torderRecords = orderRecordsService.selectById(orderId);
+        torderRecords.setState(3);
+        orderRecordsService.updateById(torderRecords);
     }
 }

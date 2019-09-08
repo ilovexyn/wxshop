@@ -25,20 +25,18 @@ public class UserInfo implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
+    private String customerNo;
     private String account;
     private String code;
-    @TableField("openId")
     private String openId;
-    @TableField("nickName")
     private String nickName;
     private String gender;
     private String city;
     private String province;
     private String country;
-    @TableField("avatarUrl")
     private String avatarUrl;
-    @TableField("unionId")
     private String unionId;
+    private Integer grade;
     private Date ct;
     private Date ut;
 

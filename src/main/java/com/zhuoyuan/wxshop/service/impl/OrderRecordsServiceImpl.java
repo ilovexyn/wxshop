@@ -139,12 +139,12 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
         String content = this.getOrderInfo(torderRecords);
         if(orderRecords.getState() == 1){//支付完成 变成 代发货
             orderRecords.setState(2);
-            mailService.sendHtmlMail("13718478366@163.com", "订单号："+torderRecords.getOrdercode(), content);
+            mailService.sendHtmlMail("13718478366@163.com", "支付完成等待发货->订单号："+torderRecords.getOrdercode(), content);
         }else if(orderRecords.getState() == 3){//待收货变为收货 订单完成
             orderRecords.setState(4);
         }else if(orderRecords.getState() == 2){//待收货变为收货 订单完成
             //发送邮件提醒发货
-            mailService.sendHtmlMail("13718478366@163.com", "订单号："+torderRecords.getOrdercode(), content);
+            mailService.sendHtmlMail("13718478366@163.com", "提醒发货->订单号："+torderRecords.getOrdercode(), content);
 
         }
         orderRecords.setUt(new Date());

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyuan.wxshop.mapper.CustomerInfoMapper">
+
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zhuoyuan.wxshop.model.CustomerInfo">
+        <id column="id" property="id" />
+        <result column="customer_no" property="customerNo" />
+        <result column="gender" property="gender" />
+        <result column="name" property="name" />
+        <result column="idno" property="idno" />
+        <result column="mail" property="mail" />
+        <result column="mobile" property="mobile" />
+        <result column="open_id" property="openId" />
+        <result column="ct" property="ct" />
+        <result column="ut" property="ut" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, customer_no, gender, name, idno, mail, mobile, ct, ut,open_id
+
+    </sql>
+
+</mapper>

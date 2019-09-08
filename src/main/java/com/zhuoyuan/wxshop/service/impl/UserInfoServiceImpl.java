@@ -7,6 +7,7 @@ import com.zhuoyuan.wxshop.mapper.UserInfoMapper;
 import com.zhuoyuan.wxshop.request.Result;
 import com.zhuoyuan.wxshop.service.IUserInfoService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.zhuoyuan.wxshop.status.CustomerInfoState;
 import com.zhuoyuan.wxshop.status.WxInfo;
 import com.zhuoyuan.wxshop.utils.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +53,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public Result save(UserInfo userInfo) {
         EntityWrapper<UserInfo> userInfoEntityWrapper = new EntityWrapper<>();
-        userInfoEntityWrapper.eq("openId",userInfo.getOpenId());
+        userInfoEntityWrapper.eq("open_id",userInfo.getOpenId());
         List<UserInfo> userInfoList =  userInfoMapper.selectList(userInfoEntityWrapper);
         if(userInfoList.size()== 0){
             userInfo.setCt(new Date());
@@ -63,7 +64,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             userInfo.setId(userInfoList.get(0).getId());
             userInfoMapper.updateById(userInfo);
         }
-
+        userInfo.setGrade(CustomerInfoState.fristGrade);
         return Result.success();
     }
 

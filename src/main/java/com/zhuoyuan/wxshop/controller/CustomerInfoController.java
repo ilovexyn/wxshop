@@ -37,7 +37,7 @@ public class CustomerInfoController {
     }
 
     @GetMapping(value ="/customerInfo")
-    public Result saveCustomerInfo (String openId){
+    public Result getCustomerInfo (String openId){
         try{
             EntityWrapper<CustomerInfo> customerInfoEntityWrapper = new EntityWrapper<>();
             customerInfoEntityWrapper.eq("open_id",openId);
@@ -58,7 +58,7 @@ public class CustomerInfoController {
 
 
     @GetMapping(value ="/applyVipResult" )
-    public Result applyVip(String openId,Integer state){
+    public Result applyVipResult(String openId,Integer state){
         try{
             return customerInfoService.applyVipResult(openId,state);
         }catch (Exception e){

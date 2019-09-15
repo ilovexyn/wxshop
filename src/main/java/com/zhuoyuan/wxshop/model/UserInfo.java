@@ -1,5 +1,6 @@
 package com.zhuoyuan.wxshop.model;
 
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -40,23 +41,4 @@ public class UserInfo implements Serializable {
     private Date ct;
     private Date ut;
 
-
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-        ", id=" + id +
-        ", account=" + account +
-        ", code=" + code +
-        ", openId=" + openId +
-        ", nickName=" + nickName +
-        ", gender=" + gender +
-        ", city=" + city +
-        ", province=" + province +
-        ", country=" + country +
-        ", avatarUrl=" + avatarUrl +
-        ", unionId=" + unionId +
-        ", ct=" + ct +
-        ", ut=" + ut +
-        "}";
-    }
 }

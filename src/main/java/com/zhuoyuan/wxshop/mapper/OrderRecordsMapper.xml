@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhuoyuan.wxshop.mapper.OrderRecordsMapper">
 
-    <!-- 开启二级缓存 -->
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.zhuoyuan.wxshop.model.OrderRecords">
@@ -25,4 +24,7 @@
         id, openid, state, address_id, express_code, type, ct, ut, ordercode, sum_price,appraise
     </sql>
 
+    <select id="selectTest" resultType="java.lang.Integer">
+        select count(*) from order_records
+    </select>
 </mapper>

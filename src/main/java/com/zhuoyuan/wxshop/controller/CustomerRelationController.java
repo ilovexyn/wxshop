@@ -56,7 +56,7 @@ public class CustomerRelationController {
     @GetMapping(value ="/customerRelationRecord")
     public Result getCustomerRelationRecord (@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size,String hCustomer,Integer grade){
         try{
-            return Result.success(customerRelationService.getCustomerRelationRecord(hCustomer,grade));
+            return customerRelationService.getCustomerRelationRecord(hCustomer,grade,current,size);
         }catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage());

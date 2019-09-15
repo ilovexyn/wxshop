@@ -17,7 +17,11 @@
         id, h_customer, l_customer, ct, ut
     </sql>
 
-    <select id = "getCustomerRelationRecord" parameterType="java.util.Map" resultType="com.zhuoyuan.wxshop.model.UserInfo">
-         SELECT * FROM `user_info`
+    <select id = "getCustomerRelationRecord" parameterType="com.zhuoyuan.wxshop.request.CustomerRelationRecord" resultType="com.zhuoyuan.wxshop.model.UserInfo">
+         SELECT a.nick_name nickName FROM `user_info` a WHERE customer_no IN
+        (SELECT l_customer FROM `customer_relation` WHERE h_customer = #{hCustomer})
+        <if test="grade != 0">
+            AND grade = #{grade}
+        </if>
     </select>
 </mapper>

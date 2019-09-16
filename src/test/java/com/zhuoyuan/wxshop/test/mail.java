@@ -3,6 +3,7 @@ package com.zhuoyuan.wxshop.test;
 
 import com.zhuoyuan.wxshop.mapper.OrderRecordsMapper;
 import com.zhuoyuan.wxshop.model.OrderRecords;
+import com.zhuoyuan.wxshop.service.IWXPayService;
 import com.zhuoyuan.wxshop.service.MailService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +19,8 @@ public class mail {
     MailService mailService;
     @Autowired
     OrderRecordsMapper orderRecordsMapper;
+    @Autowired
+    IWXPayService iwxPayService;
 
     @Test
     public void sendMail(){
@@ -29,5 +32,11 @@ public class mail {
         Integer count = orderRecordsMapper.selectTest();
         System.out.println("111");
 
+    }
+
+    @Test
+    public void pay(){
+       // iwxPayService.unifiedorder("",);
+        System.out.println("111");
     }
 }

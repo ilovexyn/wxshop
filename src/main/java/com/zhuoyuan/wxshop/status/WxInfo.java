@@ -9,7 +9,7 @@ public class WxInfo {
     public final static String jscode2sessionUrl = "https://api.weixin.qq.com/sns/jscode2session";//获取微信用户信息
 
     // =============== 微信支付   统一下单
-    public static final String mch_id = ""; //微信支付的商户id
+    public static final String mch_id = "1543160831"; //微信支付的商户id
     public static final String key = "";  //微信支付的商户密钥
     public static final String notify_url = "https://??/??/weixin/api/wxNotify";   //支付成功后的服务器回调url
     public static final String SIGNTYPE = "MD5"; //签名方式，固定值

@@ -15,6 +15,7 @@ import com.zhuoyuan.wxshop.request.Result;
 import com.zhuoyuan.wxshop.service.*;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.zhuoyuan.wxshop.status.GoodsStatus;
+import com.zhuoyuan.wxshop.utils.BusinessIdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,8 +55,9 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
     @Transactional
     public Result save(OrderRequest orderRequest) throws Exception {
         log.info("OrderRecordsServiceImpl -- save:"+JSONObject.toJSONString(orderRequest));
-        String orderCode = String.valueOf( System.currentTimeMillis())+orderRequest.getOpenid();
+        String orderCode = BusinessIdUtil.CreateBusinessId("B","1");
         Goods goods = goodsService.selectById(orderRequest.getGoodsId());
+
         if(goods == null){
             throw new Exception("没有此商品！");
         }

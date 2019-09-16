@@ -9,6 +9,7 @@ import com.zhuoyuan.wxshop.service.IUserInfoService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.zhuoyuan.wxshop.status.CustomerInfoState;
 import com.zhuoyuan.wxshop.status.WxInfo;
+import com.zhuoyuan.wxshop.utils.BusinessIdUtil;
 import com.zhuoyuan.wxshop.utils.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public Result save(UserInfo userInfo) {
+        String customerNo = BusinessIdUtil.CreateBusinessId("A","1");
         EntityWrapper<UserInfo> userInfoEntityWrapper = new EntityWrapper<>();
         userInfoEntityWrapper.eq("open_id",userInfo.getOpenId());
+        userInfo.setCustomerNo(customerNo);
         List<UserInfo> userInfoList =  userInfoMapper.selectList(userInfoEntityWrapper);
         if(userInfoList.size()== 0){
             userInfo.setCt(new Date());

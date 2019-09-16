@@ -12,7 +12,7 @@ import java.io.InputStream;
 /**
  * OSS下载和读取文件
  *
- * @author houQiang
+ * @author
  * @since 2018-07-08
  */
 @Component

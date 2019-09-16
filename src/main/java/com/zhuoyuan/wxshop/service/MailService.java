@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @ClassName MailService
  * @Description 邮件发送
- * @Author houQiang
+ * @Author
  * @Date 2018年6月29日11:31:36
  * @Version 1.0
 **/

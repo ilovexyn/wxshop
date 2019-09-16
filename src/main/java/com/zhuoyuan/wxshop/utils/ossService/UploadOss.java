@@ -12,7 +12,7 @@ import java.net.URL;
 /**
  * 上传至OSS文件服务器
  *
- * @author houQiang
+ * @author
  * @since 2018-07-08
  */
 @Service

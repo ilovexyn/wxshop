@@ -41,7 +41,7 @@ public class BusinessIdUtil {
      * 获得一个UUID
      *
      * @return String UUID
-     * @author HouQiang
+     * @author
      */
     public static String getUUID() {
         String uuid = UUID.randomUUID().toString();

@@ -84,11 +84,8 @@ public class WXPayServiceImpl implements IWXPayService {
             String stringSignTemp = "appId=" + WxInfo.appId + "&nonceStr=" + nonce_str + "&package=prepay_id=" + prepay_id+ "&signType=MD5&timeStamp=" + timeStamp;
             //再次签名，这个签名用于小程序端调用wx.requesetPayment方法
             String paySign = PayUtil.sign(stringSignTemp, WxInfo.key, "utf-8").toUpperCase();
-
             response.put("paySign", paySign);
         }
-
         response.put("appid", WxInfo.appId);
-
     }
 }

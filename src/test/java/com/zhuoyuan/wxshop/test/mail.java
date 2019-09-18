@@ -40,11 +40,6 @@ public class mail {
 
     }
 
-    @Test
-    public void pay(){
-       // iwxPayService.unifiedorder("",);
-        System.out.println("111");
-    }
 
     @Test
     public void oss(){
@@ -60,4 +55,5 @@ public class mail {
         List<String> stringList = ossUtil.getUrlList(key);
         System.out.println("111:");
     }
+
 }

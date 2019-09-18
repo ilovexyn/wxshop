@@ -1,7 +1,8 @@
 package com.zhuoyuan.wxshop.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zhuoyuan.wxshop.service.IWXPayService;
+import com.zhuoyuan.wxshop.request.Result;
+import com.zhuoyuan.wxshop.service.WXService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 public class WxController {
 
     @Autowired
-    IWXPayService iwxPayService;
+    WXService wxService;
 
     @PostMapping(value = "/pay")
     public void pay(@RequestBody JSONObject jsonObject, HttpServletRequest request){
@@ -40,10 +41,16 @@ public class WxController {
             String localName = request.getLocalName();//获取WEB服务器的主机名
 
             log.info("1111");
-            iwxPayService.unifiedorder(openId,request);
+            wxService.unifiedorder(openId,request);
         }catch (Exception e){
             e.getMessage();
             e.printStackTrace();
         }
+    }
+
+    @GetMapping(value = "/getWxuser")
+    public Result getWxuser(@RequestParam String code)
+    {
+        return   Result.success(wxService.login(code));
     }
 }

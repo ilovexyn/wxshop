@@ -2,8 +2,7 @@ package com.zhuoyuan.wxshop.test;
 
 
 import com.zhuoyuan.wxshop.mapper.OrderRecordsMapper;
-import com.zhuoyuan.wxshop.model.OrderRecords;
-import com.zhuoyuan.wxshop.service.IWXPayService;
+import com.zhuoyuan.wxshop.service.WXService;
 import com.zhuoyuan.wxshop.service.MailService;
 import com.zhuoyuan.wxshop.utils.ossService.OssUtil;
 import org.junit.Test;
@@ -24,13 +23,13 @@ public class mail {
     @Autowired
     OrderRecordsMapper orderRecordsMapper;
     @Autowired
-    IWXPayService iwxPayService;
+    WXService WXService;
     @Autowired
     OssUtil ossUtil;
 
     @Test
     public void sendMail(){
-        mailService.sendHtmlMail("13718478366@163.com", "feign  撤销操作时--调用接口--发生异常", "");
+        mailService.sendHtmlMail("743282671@qq.com", "feign  撤销操作时--调用接口--发生异常", "");
     }
 
     @Test

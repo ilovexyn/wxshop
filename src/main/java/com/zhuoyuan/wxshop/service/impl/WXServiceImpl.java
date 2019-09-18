@@ -1,9 +1,12 @@
 package com.zhuoyuan.wxshop.service.impl;
 
-import com.zhuoyuan.wxshop.service.IWXPayService;
+import com.alibaba.fastjson.JSONObject;
+import com.zhuoyuan.wxshop.request.Result;
+import com.zhuoyuan.wxshop.service.WXService;
 import com.zhuoyuan.wxshop.status.WxInfo;
+import com.zhuoyuan.wxshop.utils.HttpClientUtils;
 import com.zhuoyuan.wxshop.utils.wx.PayUtil;
-import com.zhuoyuan.wxshop.utils.wx.WxPayConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +20,8 @@ import java.util.Map;
  * @create: 2019-09-16 11:21
  **/
 @Service
-public class WXPayServiceImpl implements IWXPayService {
+@Slf4j
+public class WXServiceImpl implements WXService {
 
 
     @Override
@@ -87,5 +91,21 @@ public class WXPayServiceImpl implements IWXPayService {
             response.put("paySign", paySign);
         }
         response.put("appid", WxInfo.appId);
+    }
+
+    @Override
+    public JSONObject login(String code) {
+        String appId = WxInfo.appId;
+        String secret =WxInfo.secret;
+        String js_code =code;
+        String grant_type ="authorization_code";
+        String url = WxInfo.jscode2sessionUrl;
+        url=url+"?appid="+appId;
+        url=url+"&secret="+secret;
+        url=url+"&js_code="+js_code;
+        url=url+"&grant_type="+grant_type;
+        JSONObject jsonObject =  HttpClientUtils.httpGet(url);
+        log.info("jsonObject:"+((JSONObject) jsonObject).toString());
+        return  jsonObject;
     }
 }

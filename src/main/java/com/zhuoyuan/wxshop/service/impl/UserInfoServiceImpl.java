@@ -7,6 +7,7 @@ import com.zhuoyuan.wxshop.mapper.UserInfoMapper;
 import com.zhuoyuan.wxshop.request.Result;
 import com.zhuoyuan.wxshop.service.IUserInfoService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.zhuoyuan.wxshop.service.WXService;
 import com.zhuoyuan.wxshop.status.CustomerInfoState;
 import com.zhuoyuan.wxshop.status.WxInfo;
 import com.zhuoyuan.wxshop.utils.BusinessIdUtil;
@@ -16,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -34,6 +33,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Autowired
     UserInfoMapper userInfoMapper;
+    @Autowired
+    WXService wxService;
 
     @Override
     public Result getWxuser(String code) {

@@ -55,6 +55,7 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
     @Transactional
     public Result save(OrderRequest orderRequest) throws Exception {
         log.info("OrderRecordsServiceImpl -- save:"+JSONObject.toJSONString(orderRequest));
+
         String orderCode = BusinessIdUtil.CreateBusinessId("B","1");
         Goods goods = goodsService.selectById(orderRequest.getGoodsId());
 

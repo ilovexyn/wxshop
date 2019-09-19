@@ -19,6 +19,8 @@
         <result column="avatar_url" property="avatarUrl" />
         <result column="union_id" property="unionId" />
         <result column="grade" property="grade" />
+        <result column="sum_score" property="sumScore" />
+        <result column="true_score" property="trueScore" />
         <result column="ct" property="ct" />
         <result column="ut" property="ut" />
     </resultMap>
@@ -27,5 +29,13 @@
     <sql id="Base_Column_List">
         id,customer_no, account, code, open_id, nick_name, gender, city, province, country, avatar_url, union_id,grade,  ct, ut
     </sql>
+
+    <select id = "getCustomerRelationRecord" resultMap="BaseResultMap" parameterType="com.zhuoyuan.wxshop.request.CustomerRelationRecord" resultType="com.zhuoyuan.wxshop.model.UserInfo">
+        SELECT * FROM `user_info` a WHERE customer_no IN
+        (SELECT l_customer FROM `customer_relation` WHERE h_customer = #{hCustomer})
+        <if test="grade != 0">
+            AND grade = #{grade}
+        </if>
+    </select>
 
 </mapper>

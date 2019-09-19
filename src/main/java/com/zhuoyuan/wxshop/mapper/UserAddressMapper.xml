@@ -23,4 +23,7 @@
         id, address_info, mobile, ct, ut,name,city,address_detail,state,openid
     </sql>
 
+    <update id = "updateState" parameterType="com.zhuoyuan.wxshop.model.UserAddress">
+        update user_address set state = 1 where openid = #{openid} and id != #{id}
+    </update>
 </mapper>

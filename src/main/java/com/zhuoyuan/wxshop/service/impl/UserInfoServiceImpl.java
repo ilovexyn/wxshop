@@ -55,13 +55,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public Result save(UserInfo userInfo) {
-        SnowFlake snowFlake = new SnowFlake(1, 9);
-        String customerNo = String.valueOf(snowFlake.nextId());
         EntityWrapper<UserInfo> userInfoEntityWrapper = new EntityWrapper<>();
         userInfoEntityWrapper.eq("open_id",userInfo.getOpenId());
-        userInfo.setCustomerNo(customerNo);
         List<UserInfo> userInfoList =  userInfoMapper.selectList(userInfoEntityWrapper);
         if(userInfoList.size()== 0){
+            SnowFlake snowFlake = new SnowFlake(1, 9);
+            String customerNo = String.valueOf(snowFlake.nextId());
+            userInfo.setCustomerNo(customerNo);
             userInfo.setCt(new Date());
             userInfo.setUt(new Date());
             userInfoMapper.insert(userInfo);

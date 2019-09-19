@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface UserAddressMapper extends BaseMapper<UserAddress> {
 
+    void updateState(UserAddress userAddress);
 }

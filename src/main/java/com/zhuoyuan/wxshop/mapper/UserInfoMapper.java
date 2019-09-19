@@ -2,7 +2,10 @@ package com.zhuoyuan.wxshop.mapper;
 
 import com.zhuoyuan.wxshop.model.UserInfo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.zhuoyuan.wxshop.request.CustomerRelationRecord;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +17,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
-
+    List<UserInfo> getCustomerRelationRecord(CustomerRelationRecord customerRelationRecord);
 }

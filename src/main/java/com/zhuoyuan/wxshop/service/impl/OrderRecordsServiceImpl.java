@@ -69,7 +69,7 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
         BigDecimal sum = b1.multiply(b2);
 
         OrderRecords orderRecords = new OrderRecords();
-        orderRecords.setAddressId("1");
+        orderRecords.setAddressId(String.valueOf(orderRequest.getAddressId()));
         orderRecords.setOpenid(orderRequest.getOpenid());
         orderRecords.setState(GoodsStatus.order);
         orderRecords.setSumPrice(sum);

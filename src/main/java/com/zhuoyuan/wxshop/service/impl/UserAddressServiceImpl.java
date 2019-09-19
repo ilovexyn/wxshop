@@ -43,4 +43,20 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
 
         return Result.success();
     }
+
+    @Override
+    public void saveAddress(UserAddress userAddress) throws Exception {
+        //有这个ID 更新操作
+        UserAddress muserAddress = userAddressMapper.selectById(userAddress.getId());
+        if(muserAddress != null){
+            muserAddress.setUt(new Date());
+            userAddressMapper.updateById(muserAddress);
+        }else{
+            userAddressMapper.insert(muserAddress);
+        }
+        //是默认地址 其他不默认
+        if(userAddress.getState() == 2){
+            userAddressMapper.updateState(userAddress);
+        }
+    }
 }

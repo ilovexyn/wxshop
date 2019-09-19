@@ -15,4 +15,5 @@ import com.zhuoyuan.wxshop.request.Result;
 public interface IUserAddressService extends IService<UserAddress> {
 
     Result updateState(UserAddress userAddress);
+    void saveAddress(UserAddress userAddress)throws  Exception;
 }

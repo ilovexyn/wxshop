@@ -30,19 +30,23 @@ public class UserAddressController {
 
     @PostMapping(value = "/userAddress")
     public Result saveUserAddress(@RequestBody UserAddress userAddress){
-        userAddress.setAddressInfo(userAddress.getCity()+ userAddress.getAddressDetail());
-        boolean flag = userAddressService.insert(userAddress);
-        if(flag){
+        try{
+            userAddress.setAddressInfo(userAddress.getCity()+ userAddress.getAddressDetail());
+            userAddressService.saveAddress(userAddress);
             return Result.success();
-        }else{
+        }catch (Exception e){
             return Result.failure(ResponseCode.ERROR_500,"保存失败");
         }
     }
 
     @GetMapping(value = "/userAddress/{openid}")
-    public Result getList(@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size,@PathVariable("openid") String openid){
+    public Result getList(@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size,@PathVariable("openid") String openid,String state){
         EntityWrapper<UserAddress> userAddressEntityWrapper = new EntityWrapper<>();
         userAddressEntityWrapper.eq("openid",openid);
+        if(null != state){
+            userAddressEntityWrapper.eq("state",state);
+            return  Result.success(userAddressService.selectOne(userAddressEntityWrapper));
+        }
         Page page = new Page<Goods>(current, size);
         return  Result.success( userAddressService.selectPage(page,userAddressEntityWrapper));
     }
@@ -58,6 +62,12 @@ public class UserAddressController {
     @PutMapping(value = "/userAddress")
     public Result getList(@RequestBody UserAddress userAddress){
         return userAddressService.updateState(userAddress);
+    }
+
+    @GetMapping(value = "/userAddressById/{id}")
+    public Result getById(@PathVariable("id") String id){
+        return Result.success( userAddressService.selectById(id));
+
     }
 }
 

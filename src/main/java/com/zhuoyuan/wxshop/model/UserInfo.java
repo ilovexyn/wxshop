@@ -2,6 +2,8 @@ package com.zhuoyuan.wxshop.model;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
@@ -38,6 +40,8 @@ public class UserInfo implements Serializable {
     private String avatarUrl;
     private String unionId;
     private Integer grade;
+    private BigDecimal sumScore;
+    private BigDecimal trueScore;
     private Date ct;
     private Date ut;
 

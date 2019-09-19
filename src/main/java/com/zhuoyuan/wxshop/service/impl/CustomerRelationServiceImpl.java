@@ -1,5 +1,7 @@
 package com.zhuoyuan.wxshop.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.zhuoyuan.wxshop.mapper.UserInfoMapper;
 import com.zhuoyuan.wxshop.model.CustomerRelation;
 import com.zhuoyuan.wxshop.mapper.CustomerRelationMapper;
 import com.zhuoyuan.wxshop.model.UserInfo;
@@ -26,6 +28,8 @@ public class CustomerRelationServiceImpl extends ServiceImpl<CustomerRelationMap
 
     @Autowired
     CustomerRelationMapper customerRelationMapper;
+    @Autowired
+    UserInfoMapper userInfoMapper;
 
     @Override
     public Result save(CustomerRelation customerRelation) throws Exception {
@@ -38,14 +42,17 @@ public class CustomerRelationServiceImpl extends ServiceImpl<CustomerRelationMap
     }
 
     @Override
-    public Result getCustomerRelationRecord(String hCustomer, Integer grade,Integer current,Integer size) throws Exception{
+    public Result getCustomerRelationRecord(String openId, Integer grade,Integer current,Integer size) throws Exception{
         PageRequest pageRequest = new PageRequest();
         pageRequest.setCurrent(current);
         pageRequest.setSize(size);
         CustomerRelationRecord customerRelationRecord = new CustomerRelationRecord();
         customerRelationRecord.setGrade(grade);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        String hCustomer = userInfoMapper.selectOne(userInfo).getCustomerNo();
         customerRelationRecord.setHCustomer(hCustomer);
-        List<UserInfo> userInfoList =  customerRelationMapper.getCustomerRelationRecord(customerRelationRecord);
+        List<UserInfo> userInfoList =  userInfoMapper.getCustomerRelationRecord(customerRelationRecord);
         pageRequest.setTotal(userInfoList.size());
         List list = new ArrayList();
         int totalRecord = userInfoList.size();// 一共多少条记录

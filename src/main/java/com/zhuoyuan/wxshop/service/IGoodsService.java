@@ -1,5 +1,6 @@
 package com.zhuoyuan.wxshop.service;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.zhuoyuan.wxshop.model.Goods;
 import com.baomidou.mybatisplus.service.IService;
 
@@ -12,5 +13,9 @@ import com.baomidou.mybatisplus.service.IService;
  * @since 2019-06-30
  */
 public interface IGoodsService extends IService<Goods> {
+
+    Page<Goods>  getList(int current,int size,String name);
+
+    Goods  getById(Long id);
 
 }

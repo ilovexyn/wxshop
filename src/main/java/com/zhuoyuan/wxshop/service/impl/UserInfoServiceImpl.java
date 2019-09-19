@@ -12,6 +12,7 @@ import com.zhuoyuan.wxshop.status.CustomerInfoState;
 import com.zhuoyuan.wxshop.status.WxInfo;
 import com.zhuoyuan.wxshop.utils.BusinessIdUtil;
 import com.zhuoyuan.wxshop.utils.HttpClientUtils;
+import com.zhuoyuan.wxshop.utils.SnowFlake;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public Result save(UserInfo userInfo) {
-        String customerNo = BusinessIdUtil.CreateBusinessId("A","1");
+        SnowFlake snowFlake = new SnowFlake(1, 9);
+        String customerNo = String.valueOf(snowFlake.nextId());
         EntityWrapper<UserInfo> userInfoEntityWrapper = new EntityWrapper<>();
         userInfoEntityWrapper.eq("open_id",userInfo.getOpenId());
         userInfo.setCustomerNo(customerNo);

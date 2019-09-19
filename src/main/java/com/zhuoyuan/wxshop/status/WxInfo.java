@@ -10,8 +10,8 @@ public class WxInfo {
 
     // =============== 微信支付   统一下单
     public static final String mch_id = "1543160831"; //微信支付的商户id
-    public static final String key = "";  //微信支付的商户密钥
-    public static final String notify_url = "https://??/??/weixin/api/wxNotify";   //支付成功后的服务器回调url
+    public static final String key = "jnp645fdzhSDoOkPd5JLJKSF54546ASY";  //微信支付的商户密钥
+    public static final String notify_url = "";   //支付成功后的服务器回调url
     public static final String SIGNTYPE = "MD5"; //签名方式，固定值
     public static final String TRADETYPE = "JSAPI";  //交易类型，小程序支付的固定值为JSAPI
     public static final String   unifiedorderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";//统一下单

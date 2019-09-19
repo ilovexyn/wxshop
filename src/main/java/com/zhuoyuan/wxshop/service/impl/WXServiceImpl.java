@@ -27,7 +27,7 @@ public class WXServiceImpl implements WXService {
     @Override
     public void unifiedorder(String openid, HttpServletRequest request) throws Exception {
         //生成的随机字符串
-        String nonce_str = PayUtil.getRandomStringByLength(32);
+        String  nonce_str = PayUtil.getRandomStringByLength(32);
         //商品名称
         String body = "测试商品名称";
         //获取客户端的ip地址
@@ -62,7 +62,7 @@ public class WXServiceImpl implements WXService {
                 + "<spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>"
                 + "<total_fee>" + "1" + "</total_fee>"
                 + "<trade_type>" + WxInfo.TRADETYPE + "</trade_type>"
-                + "<sign>" + mysign + "</sign>"
+                + "<sign>" + "B72115A474E490FB72DBD0A82E3D4651" + "</sign>"
                 + "</xml>";
 
         System.out.println("调试模式_统一下单接口 请求XML数据：" + xml);

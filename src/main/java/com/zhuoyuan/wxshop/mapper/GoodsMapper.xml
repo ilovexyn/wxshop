@@ -13,13 +13,14 @@
         <result column="ct" property="ct" />
         <result column="ut" property="ut" />
         <result column="imageurl" property="imageurl" />
+        <result column="detail_imageurl" property="detailImageurl" />
         <result column="content" property="content" />
         <result column="state" property="state" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, price, place, ct, ut, imageurl, content, state
+        id, name, price, place, ct, ut, imageurl, content, state,detail_imageurl
     </sql>
 
 </mapper>

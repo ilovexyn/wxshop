@@ -1,5 +1,6 @@
 package com.zhuoyuan.wxshop.service;
 
+import com.zhuoyuan.wxshop.dto.AddressDto;
 import com.zhuoyuan.wxshop.model.UserAddress;
 import com.baomidou.mybatisplus.service.IService;
 import com.zhuoyuan.wxshop.request.Result;
@@ -15,5 +16,8 @@ import com.zhuoyuan.wxshop.request.Result;
 public interface IUserAddressService extends IService<UserAddress> {
 
     Result updateState(UserAddress userAddress);
+
     void saveAddress(UserAddress userAddress)throws  Exception;
+
+    AddressDto selectAddressById(Long id);
 }

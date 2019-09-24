@@ -43,6 +43,8 @@ public class Goods implements Serializable {
      * 商品图片链接
      */
     private String imageurl;
+
+    private String detailImageurl;
     /**
      * 商品介绍
      */

@@ -2,6 +2,7 @@ package com.zhuoyuan.wxshop.mapper;
 
 import com.zhuoyuan.wxshop.model.UserAddress;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @author Wangjie
  * @since 2019-07-08
  */
+@Repository
 public interface UserAddressMapper extends BaseMapper<UserAddress> {
 
     void updateState(UserAddress userAddress);

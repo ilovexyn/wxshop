@@ -2,6 +2,7 @@ package com.zhuoyuan.wxshop.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.zhuoyuan.wxshop.dto.GoodDetailDto;
 import com.zhuoyuan.wxshop.model.Goods;
 import com.zhuoyuan.wxshop.mapper.GoodsMapper;
 import com.zhuoyuan.wxshop.request.Result;
@@ -34,7 +35,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     public Page<Goods> getList(int current, int size, String name) {
             Page<Goods> goodsPage = new Page<Goods>(current, size);
             EntityWrapper<Goods> entityWrapper = new EntityWrapper<>();
-            if(null == name || "".equals(name)) {
+            if(null != name && !"".equals(name)) {
                 entityWrapper.like("name",name);
             }
             entityWrapper.eq("state","1");
@@ -45,16 +46,28 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
                URL url = ossUtil.getURL(key);
                String result = url.toString().replace("http","https");
                System.out.println("111:"+result);
+               goods.setImageurl(result);
            }
 
-            goodsPage.setRecords(goodsMapper.selectPage(goodsPage,entityWrapper));
+            goodsPage.setRecords(goodsList);
             return  goodsPage;
     }
 
     @Override
-    public Goods getById(Long id) {
+    public GoodDetailDto getById(Long id) {
         Goods goods = goodsMapper.selectById(id);
-        List<String> stringList = ossUtil.getUrlList(goods.getImageurl());
-        return null;
+        List<String> stringList = ossUtil.getUrlList(goods.getDetailImageurl());
+        String imageurl = ossUtil.getURL(goods.getImageurl()).toString();
+        String image = "";
+        for(String string:stringList){
+            image = string+","+string;
+        }
+        GoodDetailDto goodDetailDto = new GoodDetailDto();
+        goodDetailDto.setPrice(goods.getPrice());
+        goodDetailDto.setImageurl(imageurl);
+        goodDetailDto.setImages(stringList);
+        goodDetailDto.setContent(goods.getContent());
+        goodDetailDto.setName(goods.getName());
+        return goodDetailDto;
     }
 }

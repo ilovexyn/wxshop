@@ -42,23 +42,15 @@ public class GoodsController {
      * @return
      */
     @GetMapping(value = "/goods/all")
-    public Result getAll(@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size){
-        Page<Goods> goodsPage = goodsService.selectPage(new Page<Goods>(current, size));
+    public Result getAll(@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size,@RequestParam("name") String name){
+        Page<Goods> goodsPage = goodsService.getList(current,size,name);
         return Result.success(goodsPage);
     }
 
     @GetMapping(value = "/goods/byId/{id}")
     public Result getById(@PathVariable("id") Long id){
-        return  Result.success(goodsService.selectById(id));
+        return  Result.success(goodsService.getById(id));
     }
 
-    @GetMapping(value = "/goods/byName")
-    public Result getByName(@RequestParam("name") String name,@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size){
-        Page<Goods> goodsPage = new Page<Goods>(current, size);
-        EntityWrapper<Goods> entityWrapper = new EntityWrapper<>();
-        entityWrapper.like("name",name);
-        goodsPage.setRecords(goodsMapper.selectPage(goodsPage,entityWrapper));
-        return  Result.success(goodsPage);
-    }
 }
 

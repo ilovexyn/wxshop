@@ -3,6 +3,7 @@ package com.zhuoyuan.wxshop.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.zhuoyuan.wxshop.dto.AddressDto;
 import com.zhuoyuan.wxshop.model.Goods;
 import com.zhuoyuan.wxshop.model.UserAddress;
 import com.zhuoyuan.wxshop.request.ResponseCode;
@@ -65,8 +66,9 @@ public class UserAddressController {
     }
 
     @GetMapping(value = "/userAddressById/{id}")
-    public Result getById(@PathVariable("id") String id){
-        return Result.success( userAddressService.selectById(id));
+    public Result getById(@PathVariable("id") Long id){
+        AddressDto addressDto = userAddressService.selectAddressById(id);
+        return Result.success(addressDto);
 
     }
 }

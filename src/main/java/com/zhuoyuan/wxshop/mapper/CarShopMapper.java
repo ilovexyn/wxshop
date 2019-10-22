@@ -2,6 +2,7 @@ package com.zhuoyuan.wxshop.mapper;
 
 import com.zhuoyuan.wxshop.model.CarShop;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @author Wangjie
  * @since 2019-09-25
  */
+@Repository
 public interface CarShopMapper extends BaseMapper<CarShop> {
 
 }

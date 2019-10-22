@@ -9,13 +9,14 @@
         <result column="good_id" property="goodId" />
         <result column="num" property="num" />
         <result column="state" property="state" />
+        <result column="order_id" property="orderId" />
         <result column="ct" property="ct" />
         <result column="ut" property="ut" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, open_id, good_id, num, state, ct, ut
+        id, open_id, good_id, num, state,order_id, ct, ut
     </sql>
 
 </mapper>

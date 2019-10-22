@@ -50,7 +50,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         url=url+"&grant_type="+grant_type;
         JSONObject jsonObject =  HttpClientUtils.httpGet(url);
         log.info("jsonObject:"+((JSONObject) jsonObject).toString());
-        return  Result.success(jsonObject);
+        EntityWrapper<UserInfo> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("open_id", jsonObject.getString("openid"));
+        List<UserInfo> userInfos = userInfoMapper.selectList(entityWrapper);
+        log.info("userInfos(0):"+JSONObject.toJSONString(userInfos.get(0)));
+        return  Result.success(userInfos.get(0));
     }
 
     @Override

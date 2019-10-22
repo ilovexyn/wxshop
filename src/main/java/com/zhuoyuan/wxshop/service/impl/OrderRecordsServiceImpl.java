@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.zhuoyuan.wxshop.status.GoodsStatus;
 import com.zhuoyuan.wxshop.utils.BusinessIdUtil;
 import com.zhuoyuan.wxshop.utils.SnowFlake;
+import com.zhuoyuan.wxshop.utils.ossService.OssUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,8 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
     MailService mailService;
     @Autowired
     IUserAddressService userAddressService;
+    @Autowired
+    OssUtil ossUtil;
 
     @Override
     @Transactional
@@ -117,7 +120,7 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
                 getOrderDetailRequest.setCount(torderRecordsDetails.getNum());
                 Goods goods =goodsService.selectById(torderRecordsDetails.getGoodsId());
                 getOrderDetailRequest.setName(goods.getName());
-                getOrderDetailRequest.setImageUrl(goods.getImageurl());
+                getOrderDetailRequest.setImageUrl(ossUtil.getURL(goods.getImageurl()).toString().replace("http","https"));
                 getOrderDetailRequest.setPrice(goods.getPrice());
                 getOrderDetailRequest.setPrice(goods.getPrice());
                 goodsCount = goodsCount+torderRecordsDetails.getNum();

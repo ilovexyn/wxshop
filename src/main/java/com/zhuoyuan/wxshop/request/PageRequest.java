@@ -12,5 +12,5 @@ public class PageRequest {
     private Integer size;
     private Integer pages;
     private Integer current;
-    private List<T> records;
+    private List<Object> records;
 }

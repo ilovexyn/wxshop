@@ -19,5 +19,12 @@ public interface ICustomerInfoService extends IService<CustomerInfo> {
 
     Result applyVip(CustomerInfo customerInfo)throws Exception;
 
+    /**
+     * 会员申请结果通知·
+     * @param openId
+     * @param state
+     * @return
+     * @throws Exception
+     */
     Result applyVipResult(String openId,Integer state)throws Exception;
 }

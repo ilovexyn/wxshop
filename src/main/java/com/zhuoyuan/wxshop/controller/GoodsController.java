@@ -47,6 +47,11 @@ public class GoodsController {
         return Result.success(goodsPage);
     }
 
+    /**
+     * 商品明细信息
+     * @param id
+     * @return
+     */
     @GetMapping(value = "/goods/byId/{id}")
     public Result getById(@PathVariable("id") Long id){
         return  Result.success(goodsService.getById(id));

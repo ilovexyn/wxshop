@@ -30,6 +30,11 @@ public class OrderRecordsController {
     @Autowired
     IOrderRecordsService orderRecordsService;
 
+    /**
+     * 保存订单
+     * @param orderRequest
+     * @return
+     */
     @PostMapping(value = "/order/orderRecords")
     public Result saveOrder(@RequestBody OrderRequest orderRequest){
         try{
@@ -41,6 +46,14 @@ public class OrderRecordsController {
         }
     }
 
+    /**
+     * 获取订单
+     * @param current
+     * @param size
+     * @param openid
+     * @param state
+     * @return
+     */
     @GetMapping(value = "/order/orderRecords")
     public Result getOrder(@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size,String openid,int state){
         try{

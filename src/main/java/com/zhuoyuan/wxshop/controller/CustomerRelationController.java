@@ -28,6 +28,11 @@ public class CustomerRelationController {
     @Autowired
     ICustomerRelationService customerRelationService;
 
+    /**
+     * 客户关系绑定
+     * @param customerRelation
+     * @return
+     */
     @PostMapping(value ="/customerRelation")
     public Result saveCustomerRelation (@RequestBody CustomerRelation customerRelation){
         try{
@@ -37,6 +42,11 @@ public class CustomerRelationController {
         }
     }
 
+    /**
+     * 获取某个客户得关联关系
+     * @param lCustomer
+     * @return
+     */
     @GetMapping(value ="/customerRelation")
     public Result getCustomerRelation (String lCustomer){
         try{

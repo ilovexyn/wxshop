@@ -50,12 +50,12 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
     @Override
     public void saveAddress(UserAddress userAddress) throws Exception {
         //有这个ID 更新操作
-        UserAddress muserAddress = userAddressMapper.selectById(userAddress.getId());
-        if(muserAddress != null){
-            muserAddress.setUt(new Date());
-            userAddressMapper.updateById(muserAddress);
+        if(0 != userAddress.getId()){
+            userAddress.setUt(new Date());
+            userAddressMapper.updateById(userAddress);
         }else{
-            userAddressMapper.insert(muserAddress);
+            userAddress.setCt(new Date());
+            userAddressMapper.insert(userAddress);
         }
         //是默认地址 其他不默认
         if(userAddress.getState() == 2){
@@ -76,6 +76,7 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
         addressDto.setName(userAddress.getName());
         addressDto.setMobile(userAddress.getMobile());
         addressDto.setAddressDetail(userAddress.getAddressDetail());
+        addressDto.setState(userAddress.getState());
         return addressDto;
     }
 }

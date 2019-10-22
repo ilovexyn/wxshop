@@ -27,7 +27,7 @@ public class UserAddress implements Serializable {
     private String addressDetail;
     private String addressInfo;
     private String openid;
-    private int state;
+    private int state;//2 默认 1 不默认
     private Date ct;
     private Date ut;
 

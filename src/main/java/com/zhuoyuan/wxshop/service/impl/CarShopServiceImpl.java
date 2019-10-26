@@ -11,11 +11,14 @@ import com.zhuoyuan.wxshop.mapper.CarShopMapper;
 import com.zhuoyuan.wxshop.model.Goods;
 import com.zhuoyuan.wxshop.model.UserInfo;
 import com.zhuoyuan.wxshop.request.CarShopPageRequest;
+import com.zhuoyuan.wxshop.request.CreateCarShopOrderRequest;
 import com.zhuoyuan.wxshop.request.PageRequest;
+import com.zhuoyuan.wxshop.request.UpdateCarShopRequest;
 import com.zhuoyuan.wxshop.service.ICarShopService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.zhuoyuan.wxshop.service.IGoodsService;
 import com.zhuoyuan.wxshop.utils.ossService.OssUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,7 @@ import java.util.List;
  * @since 2019-09-25
  */
 @Service
+@Slf4j
 public class CarShopServiceImpl extends ServiceImpl<CarShopMapper, CarShop> implements ICarShopService {
 
     @Autowired
@@ -62,6 +66,7 @@ public class CarShopServiceImpl extends ServiceImpl<CarShopMapper, CarShop> impl
                 CarShopDetailDto carShopDetailDto = new CarShopDetailDto();
                 Goods goods = goodsService.selectById(carShop.getGoodId());
                 String imageurl = ossUtil.getURL(goods.getImageurl()).toString();
+                carShopDetailDto.setGoodId(goods.getId());
                 carShopDetailDto.setImageurl(imageurl);
                 carShopDetailDto.setName(goods.getName());
                 carShopDetailDto.setPrice(goods.getPrice());
@@ -145,5 +150,34 @@ public class CarShopServiceImpl extends ServiceImpl<CarShopMapper, CarShop> impl
         carShopPageRequest.setRecords(list);
         carShopPageRequest.setSum(sum);
         return carShopPageRequest;
+    }
+
+
+    @Override
+    public void updateCarShop(UpdateCarShopRequest updateCarShopRequest) throws Exception {
+        String openid = updateCarShopRequest.getOpenId();
+        Long goodsId = updateCarShopRequest.getGoodId();
+        Integer type = updateCarShopRequest.getType();
+        Integer num = 0;
+        if(type>0){
+            num = 1;
+        }else{
+            num = -1;
+        }
+
+        CarShop entityCarShop = new CarShop();
+        entityCarShop.setGoodId(goodsId);
+        entityCarShop.setOpenId(openid);
+        CarShop tCarShop = carShopMapper.selectOne(entityCarShop);
+        tCarShop.setNum(tCarShop.getNum()+num);
+        Integer uCount = carShopMapper.updateById(tCarShop);
+
+    }
+
+    @Override
+    public void createCarShopOrder(CreateCarShopOrderRequest carShopPageRequest) throws Exception {
+        //形成订单
+        //更新购物车装态
+        //发送邮件提醒
     }
 }

@@ -5,7 +5,9 @@ import com.zhuoyuan.wxshop.dto.CarShopOrderDto;
 import com.zhuoyuan.wxshop.model.CarShop;
 import com.baomidou.mybatisplus.service.IService;
 import com.zhuoyuan.wxshop.request.CarShopPageRequest;
+import com.zhuoyuan.wxshop.request.CreateCarShopOrderRequest;
 import com.zhuoyuan.wxshop.request.PageRequest;
+import com.zhuoyuan.wxshop.request.UpdateCarShopRequest;
 
 /**
  * <p>
@@ -22,4 +24,8 @@ public interface ICarShopService extends IService<CarShop> {
     void addCarShop(CarShop carShop) throws  Exception;
 
     CarShopPageRequest carShopOrder(Integer current, Integer size, String openid);
+
+    void updateCarShop (UpdateCarShopRequest updateCarShopRequest) throws  Exception;
+
+    void createCarShopOrder ( CreateCarShopOrderRequest carShopPageRequest) throws  Exception;
 }

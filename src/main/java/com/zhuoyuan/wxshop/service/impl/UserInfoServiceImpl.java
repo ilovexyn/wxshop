@@ -52,9 +52,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         log.info("jsonObject:"+((JSONObject) jsonObject).toString());
         EntityWrapper<UserInfo> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("open_id", jsonObject.getString("openid"));
-        List<UserInfo> userInfos = userInfoMapper.selectList(entityWrapper);
-        log.info("userInfos(0):"+JSONObject.toJSONString(userInfos.get(0)));
-        return  Result.success(userInfos.get(0));
+        UserInfo userInfos = new UserInfo();
+        if(userInfoMapper.selectList(entityWrapper).size() >0){
+            userInfos = userInfoMapper.selectList(entityWrapper).get(0);
+        }else {
+            userInfos.setOpenId(jsonObject.getString("openid"));
+            userInfos.setGrade(0);
+        }
+
+        log.info("userInfos(0):"+JSONObject.toJSONString(userInfos));
+        return  Result.success(userInfos);
     }
 
     @Override
@@ -72,7 +79,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             userInfoMapper.insert(userInfo);
         }else{
             userInfo.setUt(new Date());
-            userInfo.setId(userInfoList.get(0).getId());
+            //userInfo.setId(userInfoList.get(0).getId());
             userInfoMapper.updateById(userInfo);
         }
         userInfo.setGrade(CustomerInfoState.fristGrade);

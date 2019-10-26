@@ -1,12 +1,11 @@
 package com.zhuoyuan.wxshop.controller;
 
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.zhuoyuan.wxshop.dto.CarShopDto;
 import com.zhuoyuan.wxshop.dto.CarShopOrderDto;
 import com.zhuoyuan.wxshop.model.CarShop;
-import com.zhuoyuan.wxshop.request.CarShopPageRequest;
-import com.zhuoyuan.wxshop.request.PageRequest;
-import com.zhuoyuan.wxshop.request.Result;
+import com.zhuoyuan.wxshop.request.*;
 import com.zhuoyuan.wxshop.service.ICarShopService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,13 +78,52 @@ public class CarShopController {
      * @param carShop
      * @return
      */
-//    @PostMapping(value = "/carShopOrder")
-//    public Result getCarShop(@RequestBody CarShop carShop){
-//        CarShopPageRequest carShopPageRequest = carShopService.getCarShop(current,size,openid);
-//        return Result.success(carShopPageRequest);
-//    }
+    @PostMapping(value = "/carShopOrder")
+    public Result createCarShopOrder(@RequestBody CreateCarShopOrderRequest carShopPageRequest){
+        try {
+            carShopService.createCarShopOrder(carShopPageRequest);
+            return Result.success();
+        } catch (Exception e) {
+            log.error("updateCarShop -- Exception" + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    /**
+     * 购物车数量增减
+     * @param updateCarShopRequest
+     * @return
+     */
+    @PostMapping(value = "/updateCarShop")
+    public Result updateCarShop(@RequestBody UpdateCarShopRequest updateCarShopRequest) {
+        try {
+            carShopService.updateCarShop(updateCarShopRequest);
+            return Result.success();
+        } catch (Exception e) {
+            log.error("updateCarShop -- Exception" + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-
+    /**
+     *
+     * @param carShop
+     * @return
+     */
+    @PostMapping(value ="/dealCarshop")
+    public Result dealCarshop(@RequestBody CarShop carShop){
+        try {
+            EntityWrapper<CarShop> entityWrapper = new EntityWrapper<>();
+            entityWrapper.eq("good_id",carShop.getGoodId()).eq("open_id",carShop.getOpenId());
+            carShopService.delete(entityWrapper);
+            return Result.success();
+        } catch (Exception e) {
+            log.error("dealCarshop -- Exception" + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
 

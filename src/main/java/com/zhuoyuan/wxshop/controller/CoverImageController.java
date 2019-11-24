@@ -27,7 +27,6 @@ import java.util.List;
  * @since 2019-09-25
  */
 @RestController
-@RequestMapping(value = "/api/wxserve")
 @Slf4j
 public class CoverImageController {
 

@@ -7,6 +7,7 @@ import com.zhuoyuan.wxshop.dto.CarShopOrderDto;
 import com.zhuoyuan.wxshop.model.CarShop;
 import com.zhuoyuan.wxshop.request.*;
 import com.zhuoyuan.wxshop.service.ICarShopService;
+import com.zhuoyuan.wxshop.service.IOrderRecordsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +23,13 @@ import org.springframework.stereotype.Controller;
  * @since 2019-09-25
  */
 @RestController
-@RequestMapping(value = "/api/wxserve")
 @Slf4j
 public class CarShopController {
 
     @Autowired
     ICarShopService carShopService;
+    @Autowired
+    IOrderRecordsService orderRecordsService;
 
     /**
      *  获取购物车信息
@@ -81,7 +83,7 @@ public class CarShopController {
     @PostMapping(value = "/carShopOrder")
     public Result createCarShopOrder(@RequestBody CreateCarShopOrderRequest carShopPageRequest){
         try {
-            carShopService.createCarShopOrder(carShopPageRequest);
+            orderRecordsService.createCarShopOrder(carShopPageRequest);
             return Result.success();
         } catch (Exception e) {
             log.error("updateCarShop -- Exception" + e.getMessage());

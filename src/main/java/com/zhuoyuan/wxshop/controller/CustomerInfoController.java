@@ -23,7 +23,6 @@ import org.springframework.stereotype.Controller;
  * @since 2019-09-06
  */
 @RestController
-@RequestMapping(value = "/api/wxserve")
 @Slf4j
 public class CustomerInfoController {
 

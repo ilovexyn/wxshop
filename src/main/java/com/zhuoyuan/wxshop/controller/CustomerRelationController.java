@@ -21,7 +21,6 @@ import org.springframework.stereotype.Controller;
  * @since 2019-09-09
  */
 @RestController
-@RequestMapping(value = "/api/wxserve")
 @Slf4j
 public class CustomerRelationController {
 
@@ -64,9 +63,9 @@ public class CustomerRelationController {
      */
 
     @GetMapping(value ="/customerRelationRecord")
-    public Result getCustomerRelationRecord (@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size,String openId,Integer grade){
+    public Result getCustomerRelationRecord (@RequestParam(value ="current",defaultValue = "1") int current, @RequestParam(value ="size",defaultValue = "10") int size,String customerNo){
         try{
-            return customerRelationService.getCustomerRelationRecord(openId,grade,current,size);
+            return customerRelationService.getCustomerRelationRecord(customerNo,current,size);
         }catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage());

@@ -26,7 +26,6 @@ import java.util.List;
  * @since 2019-06-30
  */
 @RestController
-@RequestMapping(value = "/api/wxserve")
 @Slf4j
 public class GoodsController {
 

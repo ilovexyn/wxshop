@@ -20,7 +20,6 @@ import java.util.Map;
  * @since 2019-06-30
  */
 @RestController
-@RequestMapping(value = "/api/wxserve")
 public class UserInfoController {
 
     @Autowired

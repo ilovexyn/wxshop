@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +59,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         }else {
             userInfos.setOpenId(jsonObject.getString("openid"));
             userInfos.setGrade(0);
+            userInfos.setSumScore(new BigDecimal(0));
+            userInfos.setCustomerNo("--");
         }
 
         log.info("userInfos(0):"+JSONObject.toJSONString(userInfos));
@@ -74,6 +77,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             String customerNo = String.valueOf(snowFlake.nextId());
             userInfo.setGrade(CustomerInfoState.fristGrade);
             userInfo.setCustomerNo(customerNo);
+            userInfo.setSumScore(new BigDecimal(0));
+            userInfo.setTrueScore(new BigDecimal(0));
             userInfo.setCt(new Date());
             userInfo.setUt(new Date());
             userInfoMapper.insert(userInfo);

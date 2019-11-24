@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
  * @create: 2019-09-18 10:08
  **/
 @RestController
-@RequestMapping(value = "/api/wxserve")
 @Slf4j
 public class WxController {
 

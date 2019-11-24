@@ -27,5 +27,4 @@ public interface ICarShopService extends IService<CarShop> {
 
     void updateCarShop (UpdateCarShopRequest updateCarShopRequest) throws  Exception;
 
-    void createCarShopOrder ( CreateCarShopOrderRequest carShopPageRequest) throws  Exception;
 }

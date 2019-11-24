@@ -13,6 +13,7 @@ import com.zhuoyuan.wxshop.service.MailService;
 import com.zhuoyuan.wxshop.status.CustomerInfoState;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -36,6 +37,8 @@ public class CustomerInfoServiceImpl extends ServiceImpl<CustomerInfoMapper, Cus
     MailService mailService;
     @Autowired
     IUserInfoService userInfoService;
+    @Value("${spring.mail.username}")
+    private String mailUrl;
 
     @Override
     public Result save(CustomerInfo customerInfo)throws Exception {
@@ -67,12 +70,10 @@ public class CustomerInfoServiceImpl extends ServiceImpl<CustomerInfoMapper, Cus
             String url1 ="https://www.1000000tao.com/api/wxserve/order/applyVipResult?state=1&openId="+customerInfo.getOpenId() ;
             String url2 ="https://www.1000000tao.com/api/wxserve/order/applyVipResult?state=0&openId="+customerInfo.getOpenId() ;
 
-
-
             String content = "姓名："+ customerInfoList.get(0).getName()+" 证件号码："+customerInfoList.get(0).getIdno()+"通过："+url1+
                     "不通过："+url2;
-            String mail = customerInfoList.get(0).getMail();
-            Boolean flag =  mailService.sendHtmlMail(mail, "会员申请", content);
+            Boolean flag =  mailService.sendHtmlMail(mailUrl, "会员申请", content);
+            log.info("邮件结果："+flag);
         }
         return Result.success();
     }

@@ -3,6 +3,7 @@ package com.zhuoyuan.wxshop.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.zhuoyuan.wxshop.dto.CarShopDetailDto;
 import com.zhuoyuan.wxshop.dto.GetOrderDetailRequest;
 import com.zhuoyuan.wxshop.dto.GetOrderRequest;
 import com.zhuoyuan.wxshop.dto.OrderRequest;
@@ -11,6 +12,7 @@ import com.zhuoyuan.wxshop.model.OrderRecords;
 import com.zhuoyuan.wxshop.mapper.OrderRecordsMapper;
 import com.zhuoyuan.wxshop.model.OrderRecordsDetails;
 import com.zhuoyuan.wxshop.model.UserAddress;
+import com.zhuoyuan.wxshop.request.CreateCarShopOrderRequest;
 import com.zhuoyuan.wxshop.request.Result;
 import com.zhuoyuan.wxshop.service.*;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -20,6 +22,7 @@ import com.zhuoyuan.wxshop.utils.SnowFlake;
 import com.zhuoyuan.wxshop.utils.ossService.OssUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +57,8 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
     IUserAddressService userAddressService;
     @Autowired
     OssUtil ossUtil;
+    @Value("${spring.mail.username}")
+    private String mailUrl;
 
     @Override
     @Transactional
@@ -74,11 +79,12 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
         OrderRecords orderRecords = new OrderRecords();
         orderRecords.setAddressId(String.valueOf(orderRequest.getAddressId()));
         orderRecords.setOpenid(orderRequest.getOpenid());
-        orderRecords.setState(GoodsStatus.order);
+        orderRecords.setState(GoodsStatus.pay);
         orderRecords.setSumPrice(sum);
         orderRecords.setOrdercode(orderCode);
         orderRecords.setCt(new Date());
         orderRecords.setUt(new Date());
+        orderRecords.setType(2);
 
         orderRecordsService.insert(orderRecords);
 
@@ -90,7 +96,9 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
         orderRecordsDetails.setPrice(goods.getPrice());
         orderRecordsDetails.setUt(new Date());
         orderRecordsDetailsService.insert(orderRecordsDetails);
-
+        String content = this.getOrderInfo(orderRecords);
+        mailService.sendHtmlMail(mailUrl, "支付完成等待发货->订单号："+orderCode, content);
+        //更新积分
         return Result.success();
     }
 
@@ -146,12 +154,12 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
         String content = this.getOrderInfo(torderRecords);
         if(orderRecords.getState() == 1){//支付完成 变成 代发货
             orderRecords.setState(2);
-            mailService.sendHtmlMail("13718478366@163.com", "支付完成等待发货->订单号："+torderRecords.getOrdercode(), content);
+            mailService.sendHtmlMail(mailUrl, "支付完成等待发货->订单号："+torderRecords.getOrdercode(), content);
         }else if(orderRecords.getState() == 3){//待收货变为收货 订单完成
             orderRecords.setState(4);
         }else if(orderRecords.getState() == 2){//待收货变为收货 订单完成
             //发送邮件提醒发货
-            mailService.sendHtmlMail("13718478366@163.com", "提醒发货->订单号："+torderRecords.getOrdercode(), content);
+            mailService.sendHtmlMail(mailUrl, "提醒发货->订单号："+torderRecords.getOrdercode(), content);
 
         }
         orderRecords.setUt(new Date());
@@ -173,8 +181,7 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
         UserAddress userAddress = userAddressService.selectById(torderRecords.getAddressId());
         addressInfo = "  姓名："+userAddress.getName()+"手机号："+userAddress.getMobile()+"地址:"+userAddress.getAddressInfo();
         content = content+addressInfo;
-        String url ="https://www.1000000tao.com/api/wxserve/order/updateOrderByMail?orderId=\"+torderRecords.getId()" ;
-        content = content+"操作:"+"<a href='"+url+"'";
+
         return content;
     }
 
@@ -183,5 +190,40 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
         OrderRecords torderRecords = orderRecordsService.selectById(orderId);
         torderRecords.setState(3);
         orderRecordsService.updateById(torderRecords);
+    }
+
+    @Override
+    @Transactional
+    public void createCarShopOrder(CreateCarShopOrderRequest carShopPageRequest) throws Exception {
+        //形成订单
+        SnowFlake snowFlake = new SnowFlake(2, 9);
+        String orderCode = String.valueOf(snowFlake.nextId());
+        OrderRecords orderRecords = new OrderRecords();
+        orderRecords.setAddressId(String.valueOf(carShopPageRequest.getAddressId()));
+        orderRecords.setOpenid(carShopPageRequest.getOpenid());
+        orderRecords.setState(GoodsStatus.pay);
+        orderRecords.setSumPrice(carShopPageRequest.getSum());
+        orderRecords.setOrdercode(orderCode);
+        orderRecords.setCt(new Date());
+        orderRecords.setUt(new Date());
+        orderRecords.setType(2);
+        orderRecordsService.insert(orderRecords);
+        //明细
+        List<OrderRecordsDetails> orderRecordsDetailsList = new ArrayList<>();
+        List<CarShopDetailDto> carShopDetailDtoList = carShopPageRequest.getCarShopDetailDtoList();
+        for(CarShopDetailDto carShopDetailDto:carShopDetailDtoList){
+            OrderRecordsDetails orderRecordsDetails = new OrderRecordsDetails();
+            orderRecordsDetails.setCt(new Date());
+            orderRecordsDetails.setGoodsId(carShopDetailDto.getGoodId());
+            orderRecordsDetails.setNum(carShopDetailDto.getNum());
+            orderRecordsDetails.setOrderId(orderRecords.getId());
+            orderRecordsDetails.setPrice(carShopDetailDto.getPrice());
+            orderRecordsDetails.setUt(new Date());
+            orderRecordsDetailsList.add(orderRecordsDetails);
+        }
+        orderRecordsDetailsService.insertBatch(orderRecordsDetailsList);
+        //发送邮件提醒
+        String content = this.getOrderInfo(orderRecords);
+        mailService.sendHtmlMail(mailUrl, "支付完成等待发货->订单号："+orderCode, content);
     }
 }

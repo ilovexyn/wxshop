@@ -10,4 +10,6 @@ import java.util.List;
 public class CreateCarShopOrderRequest {
    private  BigDecimal sum;
    private List<CarShopDetailDto> carShopDetailDtoList;
+   private String openid;
+   private String addressId;
 }

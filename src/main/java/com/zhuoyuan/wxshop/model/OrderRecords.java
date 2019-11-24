@@ -43,7 +43,7 @@ public class OrderRecords implements Serializable {
      */
     private String expressCode;
     /**
-     * 订单类型：1-客户购买 2-经纪人进货 3-经纪人买经纪人
+     * 订单类型：1-线上支付 2-线下支付
      */
     private Integer type;
     private Date ct;

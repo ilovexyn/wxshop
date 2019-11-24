@@ -1,15 +1,14 @@
 package com.zhuoyuan.wxshop.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.zhuoyuan.wxshop.dto.CarShopDetailDto;
 import com.zhuoyuan.wxshop.dto.CarShopDto;
 import com.zhuoyuan.wxshop.dto.CarShopOrderDetailDto;
 import com.zhuoyuan.wxshop.dto.CarShopOrderDto;
-import com.zhuoyuan.wxshop.model.CarShop;
+import com.zhuoyuan.wxshop.model.*;
 import com.zhuoyuan.wxshop.mapper.CarShopMapper;
-import com.zhuoyuan.wxshop.model.Goods;
-import com.zhuoyuan.wxshop.model.UserInfo;
 import com.zhuoyuan.wxshop.request.CarShopPageRequest;
 import com.zhuoyuan.wxshop.request.CreateCarShopOrderRequest;
 import com.zhuoyuan.wxshop.request.PageRequest;
@@ -17,10 +16,15 @@ import com.zhuoyuan.wxshop.request.UpdateCarShopRequest;
 import com.zhuoyuan.wxshop.service.ICarShopService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.zhuoyuan.wxshop.service.IGoodsService;
+import com.zhuoyuan.wxshop.service.IOrderRecordsDetailsService;
+import com.zhuoyuan.wxshop.service.IOrderRecordsService;
+import com.zhuoyuan.wxshop.status.GoodsStatus;
+import com.zhuoyuan.wxshop.utils.SnowFlake;
 import com.zhuoyuan.wxshop.utils.ossService.OssUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -45,6 +49,10 @@ public class CarShopServiceImpl extends ServiceImpl<CarShopMapper, CarShop> impl
     IGoodsService goodsService;
     @Autowired
     OssUtil ossUtil;
+    @Autowired
+    IOrderRecordsService orderRecordsService;
+    @Autowired
+    IOrderRecordsDetailsService orderRecordsDetailsService;
 
     @Override
     public CarShopPageRequest getCarShop(Integer current, Integer size, String openid) {
@@ -172,12 +180,5 @@ public class CarShopServiceImpl extends ServiceImpl<CarShopMapper, CarShop> impl
         tCarShop.setNum(tCarShop.getNum()+num);
         Integer uCount = carShopMapper.updateById(tCarShop);
 
-    }
-
-    @Override
-    public void createCarShopOrder(CreateCarShopOrderRequest carShopPageRequest) throws Exception {
-        //形成订单
-        //更新购物车装态
-        //发送邮件提醒
     }
 }

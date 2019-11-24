@@ -65,6 +65,9 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
 
     @Override
     public AddressDto selectAddressById(Long id) {
+        if(id == 0){
+            return null;
+        }
         UserAddress userAddress = userAddressMapper.selectById(id);
         AddressDto addressDto = new AddressDto();
         String addressInfo[] = userAddress.getAddressInfo().split(",");

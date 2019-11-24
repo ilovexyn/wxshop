@@ -24,19 +24,18 @@ import org.springframework.stereotype.Controller;
  */
 @RestController
 @Slf4j
-@RequestMapping(value = "/api/wxserve")
 public class OrderRecordsController {
 
     @Autowired
     IOrderRecordsService orderRecordsService;
 
     /**
-     * 保存订单
+     * 保存订单  线下支付
      * @param orderRequest
      * @return
      */
-    @PostMapping(value = "/order/orderRecords")
-    public Result saveOrder(@RequestBody OrderRequest orderRequest){
+    @PostMapping(value = "/order/orderRecords/offline")
+    public Result offline(@RequestBody OrderRequest orderRequest){
         try{
             return orderRecordsService.save(orderRequest);
         }catch (Exception e){

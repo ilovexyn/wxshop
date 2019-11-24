@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class CustomerRelationRecord {
-    private String hCustomer;
-    private Integer grade;
+    private String lCustomer;//
+    private String name;
+    private int payCount;
 }

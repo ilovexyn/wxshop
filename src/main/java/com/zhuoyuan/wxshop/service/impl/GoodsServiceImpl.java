@@ -43,8 +43,9 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             //根据路径显示商品图片
            for(Goods goods:goodsList){
                String key = goods.getImageurl();
-               URL url = ossUtil.getURL(key);
-               String result = url.toString().replace("http","https");
+              // URL url = ossUtil.getURL(key);
+               String result = "";
+             //  String result = url.toString().replace("http","https");
                System.out.println("111:"+result);
                goods.setImageurl(result);
            }

@@ -16,5 +16,5 @@ public interface ICustomerRelationService extends IService<CustomerRelation> {
 
     Result save(CustomerRelation customerRelation) throws Exception;
 
-    Result getCustomerRelationRecord(String openId,Integer grade,Integer current,Integer size)throws Exception;
+    Result getCustomerRelationRecord(String customerNo,Integer current,Integer size)throws Exception;
 }

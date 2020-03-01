@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyuan.wxshop.mapper.OtherCustomerMapper">
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zhuoyuan.wxshop.model.OtherCustomer">
+        <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="address" property="address" />
+        <result column="mobile" property="mobile" />
+        <result column="grade" property="grade" />
+        <result column="relation" property="relation" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, address, mobile, grade,relation
+    </sql>
+
+</mapper>

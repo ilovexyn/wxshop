@@ -43,9 +43,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             //根据路径显示商品图片
            for(Goods goods:goodsList){
                String key = goods.getImageurl();
-              // URL url = ossUtil.getURL(key);
-               String result = "";
-             //  String result = url.toString().replace("http","https");
+               URL url = ossUtil.getURL(key);
+               String result = url.toString().replace("http","https");
                System.out.println("111:"+result);
                goods.setImageurl(result);
            }
@@ -59,16 +58,14 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         Goods goods = goodsMapper.selectById(id);
         List<String> stringList = ossUtil.getUrlList(goods.getDetailImageurl());
         String imageurl = ossUtil.getURL(goods.getImageurl()).toString();
-        String image = "";
-        for(String string:stringList){
-            image = string+","+string;
-        }
+        String contentImageurl = ossUtil.getURL(goods.getContentImageurl()).toString();
         GoodDetailDto goodDetailDto = new GoodDetailDto();
         goodDetailDto.setPrice(goods.getPrice());
         goodDetailDto.setImageurl(imageurl);
         goodDetailDto.setImages(stringList);
         goodDetailDto.setContent(goods.getContent());
         goodDetailDto.setName(goods.getName());
+        goodDetailDto.setContentImageurl(contentImageurl);
         return goodDetailDto;
     }
 }

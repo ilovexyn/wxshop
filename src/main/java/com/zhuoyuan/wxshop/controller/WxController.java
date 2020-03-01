@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @program: wxshop
@@ -51,5 +53,17 @@ public class WxController {
     public Result getWxuser(@RequestParam String code)
     {
         return   Result.success(wxService.login(code));
+    }
+
+    public static void main(String[] args) {
+         final Map<String,String> map = new HashMap<String,String>();
+         Map<String,String> map2 = new HashMap<String,String>();
+        map.put("1","1");
+        map2.put("2","2");
+
+
+
+        System.out.println();
+
     }
 }

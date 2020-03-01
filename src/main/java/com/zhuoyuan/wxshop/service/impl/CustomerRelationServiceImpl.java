@@ -42,6 +42,15 @@ public class CustomerRelationServiceImpl extends ServiceImpl<CustomerRelationMap
 
     @Override
     public Result save(CustomerRelation customerRelation) throws Exception {
+        EntityWrapper<CustomerInfo> customerInfoEntityWrapper = new EntityWrapper<>();
+        customerInfoEntityWrapper.eq("customer_no",customerRelation.gethCustomer());
+        List<CustomerInfo> customerInfoList = customerInfoMapper.selectList(customerInfoEntityWrapper);
+        if(customerInfoList.size() == 0){
+            return Result.failure("201","客户号不存在");
+        }
+        if(customerRelation.getlCustomer().equals(customerRelation.gethCustomer())){
+            return Result.failure("202","自身ID无效");
+        }
 
         customerRelation.setCt(new Date());
         customerRelation.setUt(new Date());

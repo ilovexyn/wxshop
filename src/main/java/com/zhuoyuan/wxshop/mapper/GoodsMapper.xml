@@ -16,11 +16,13 @@
         <result column="detail_imageurl" property="detailImageurl" />
         <result column="content" property="content" />
         <result column="state" property="state" />
+        <result column="content_imageurl" property="contentImageurl" />
+
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, price, place, ct, ut, imageurl, content, state,detail_imageurl
+        id, name, price, place, ct, ut, imageurl, content, state,detail_imageurl,content_imageurl
     </sql>
 
 </mapper>

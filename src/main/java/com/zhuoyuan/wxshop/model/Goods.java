@@ -54,20 +54,6 @@ public class Goods implements Serializable {
      */
     private Integer state;
 
+    private String contentImageurl;
 
-
-    @Override
-    public String toString() {
-        return "Goods{" +
-        ", id=" + id +
-        ", name=" + name +
-        ", price=" + price +
-        ", place=" + place +
-        ", ct=" + ct +
-        ", ut=" + ut +
-        ", imageurl=" + imageurl +
-        ", content=" + content +
-        ", state=" + state +
-        "}";
-    }
 }

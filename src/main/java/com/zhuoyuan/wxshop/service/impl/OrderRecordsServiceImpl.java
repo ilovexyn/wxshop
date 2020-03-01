@@ -7,11 +7,9 @@ import com.zhuoyuan.wxshop.dto.CarShopDetailDto;
 import com.zhuoyuan.wxshop.dto.GetOrderDetailRequest;
 import com.zhuoyuan.wxshop.dto.GetOrderRequest;
 import com.zhuoyuan.wxshop.dto.OrderRequest;
-import com.zhuoyuan.wxshop.model.Goods;
-import com.zhuoyuan.wxshop.model.OrderRecords;
+import com.zhuoyuan.wxshop.mapper.CarShopMapper;
+import com.zhuoyuan.wxshop.model.*;
 import com.zhuoyuan.wxshop.mapper.OrderRecordsMapper;
-import com.zhuoyuan.wxshop.model.OrderRecordsDetails;
-import com.zhuoyuan.wxshop.model.UserAddress;
 import com.zhuoyuan.wxshop.request.CreateCarShopOrderRequest;
 import com.zhuoyuan.wxshop.request.Result;
 import com.zhuoyuan.wxshop.service.*;
@@ -57,6 +55,8 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
     IUserAddressService userAddressService;
     @Autowired
     OssUtil ossUtil;
+    @Autowired
+    CarShopMapper carShopMapper;
     @Value("${spring.mail.username}")
     private String mailUrl;
 
@@ -211,6 +211,7 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
         //明细
         List<OrderRecordsDetails> orderRecordsDetailsList = new ArrayList<>();
         List<CarShopDetailDto> carShopDetailDtoList = carShopPageRequest.getCarShopDetailDtoList();
+        List list = new ArrayList();
         for(CarShopDetailDto carShopDetailDto:carShopDetailDtoList){
             OrderRecordsDetails orderRecordsDetails = new OrderRecordsDetails();
             orderRecordsDetails.setCt(new Date());
@@ -219,9 +220,21 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
             orderRecordsDetails.setOrderId(orderRecords.getId());
             orderRecordsDetails.setPrice(carShopDetailDto.getPrice());
             orderRecordsDetails.setUt(new Date());
+            list.add(carShopDetailDto.getGoodId());
             orderRecordsDetailsList.add(orderRecordsDetails);
         }
         orderRecordsDetailsService.insertBatch(orderRecordsDetailsList);
+        //更改购物车状态
+        //carShopPageRequest.getOpenid()
+        CarShop carShop = new CarShop();
+        carShop.setState(1);
+        carShop.setOrderId(orderCode);
+        carShop.setUt(new Date());
+        EntityWrapper<CarShop> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("open_id",carShopPageRequest.getOpenid());
+        entityWrapper.in("good_id",list);
+        entityWrapper.eq("state",0);
+        carShopMapper.update(carShop,entityWrapper);
         //发送邮件提醒
         String content = this.getOrderInfo(orderRecords);
         mailService.sendHtmlMail(mailUrl, "支付完成等待发货->订单号："+orderCode, content);

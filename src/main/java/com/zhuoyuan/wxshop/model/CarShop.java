@@ -28,7 +28,7 @@ public class CarShop implements Serializable {
     private Long goodId;
     private Integer num;
     private Integer state;
-    private Long orderId;
+    private String orderId;
     private Date ct;
     private Date ut;
 

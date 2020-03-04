@@ -52,6 +52,8 @@ public class WxController {
     @GetMapping(value = "/getWxuser")
     public Result getWxuser(@RequestParam String code)
     {
+
+        log.info("-- getWxuser --");
         return   Result.success(wxService.login(code));
     }
 

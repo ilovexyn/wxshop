@@ -44,10 +44,10 @@ public class CoverImageController {
     public Result cover(){
         log.info("cover == begin —>");
         CoverImage coverImage = coverImageService.selectById((long)1);
-        List<String> strings = ossUtil.getUrlList(coverImage.getUrl());
-        strings.remove(0);
-        log.info("cover == return —>"+JSONObject.toJSONString(strings));
-        return Result.success(strings);
+        //List<String> strings = ossUtil.getUrlList(coverImage.getUrl());
+        //strings.remove(0);
+        //log.info("cover == return —>"+JSONObject.toJSONString(strings));
+        return Result.success("");
     }
 }
 

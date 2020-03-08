@@ -128,7 +128,7 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
                 getOrderDetailRequest.setCount(torderRecordsDetails.getNum());
                 Goods goods =goodsService.selectById(torderRecordsDetails.getGoodsId());
                 getOrderDetailRequest.setName(goods.getName());
-                getOrderDetailRequest.setImageUrl(ossUtil.getURL(goods.getImageurl()).toString().replace("http","https"));
+                //getOrderDetailRequest.setImageUrl(ossUtil.getURL(goods.getImageurl()).toString().replace("http","https"));
                 getOrderDetailRequest.setPrice(goods.getPrice());
                 getOrderDetailRequest.setPrice(goods.getPrice());
                 goodsCount = goodsCount+torderRecordsDetails.getNum();

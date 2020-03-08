@@ -67,7 +67,18 @@ public class UserAddressController {
     public Result getById(@PathVariable("id") Long id){
         AddressDto addressDto = userAddressService.selectAddressById(id);
         return Result.success(addressDto);
+    }
 
+    @PostMapping(value = "/userAddress/delete")
+    public  Result deleteById(@RequestBody UserAddress userAddress){
+        try{
+            userAddressService.deleteById(userAddress.getId());
+            return Result.success();
+        }catch (Exception e){
+            e.getMessage();
+            e.printStackTrace();
+            return Result.failure(ResponseCode.ERROR_500,"保存失败");
+        }
     }
 }
 

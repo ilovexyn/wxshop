@@ -46,6 +46,23 @@ public class OrderRecordsController {
     }
 
     /**
+     * 线程池下订单 ，增加分布式锁
+     */
+
+    @PostMapping(value = "/order/orderRecords/offline/pool")
+    public Result offlinePool(@RequestBody OrderRequest orderRequest){
+        try{
+             orderRecordsService.offlinePool(orderRequest);
+             return Result.success(ResponseCode.SUCCESS);
+        }catch (Exception e){
+            log.error("OrderRecordsController-saveOrder:"+e.getMessage());
+            e.printStackTrace();
+            return Result.failure(ResponseCode.ERROR_500,e.getMessage());
+        }
+    }
+
+
+    /**
      * 获取订单
      * @param current
      * @param size

@@ -18,12 +18,14 @@ import com.zhuoyuan.wxshop.status.GoodsStatus;
 import com.zhuoyuan.wxshop.utils.BusinessIdUtil;
 import com.zhuoyuan.wxshop.utils.SnowFlake;
 import com.zhuoyuan.wxshop.utils.ossService.OssUtil;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,23 +44,25 @@ import java.util.List;
 public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, OrderRecords> implements IOrderRecordsService {
 
     @Autowired
-    IOrderRecordsService orderRecordsService;
+    private IOrderRecordsService orderRecordsService;
     @Autowired
-    IOrderRecordsDetailsService orderRecordsDetailsService;
+    private IOrderRecordsDetailsService orderRecordsDetailsService;
     @Autowired
     IGoodsService goodsService;
     @Autowired
-    OrderRecordsMapper orderRecordsMapper;
+    private OrderRecordsMapper orderRecordsMapper;
     @Autowired
-    MailService mailService;
+    private MailService mailService;
     @Autowired
-    IUserAddressService userAddressService;
+    private IUserAddressService userAddressService;
     @Autowired
-    OssUtil ossUtil;
+    private OssUtil ossUtil;
     @Autowired
-    CarShopMapper carShopMapper;
+    private CarShopMapper carShopMapper;
     @Value("${spring.mail.username}")
     private String mailUrl;
+    @Resource
+    private IStoreHouseService storeHouseService;
 
     @Override
     @Transactional
@@ -238,5 +242,57 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
         //发送邮件提醒
         String content = this.getOrderInfo(orderRecords);
         mailService.sendHtmlMail(mailUrl, "支付完成等待发货->订单号："+orderCode, content);
+    }
+
+    @Override
+    public  synchronized void offlinePool(OrderRequest orderRequest) throws Exception{
+
+            System.out.println(System.currentTimeMillis());
+            log.info("OrderRecordsServiceImpl -- save:"+JSONObject.toJSONString(orderRequest));
+            SnowFlake snowFlake = new SnowFlake(2, 9);
+            String orderCode = String.valueOf(snowFlake.nextId());
+            Goods goods = goodsService.selectById(orderRequest.getGoodsId());
+
+            StoreHouse storeHouse =
+                    storeHouseService.selectOne(new EntityWrapper<StoreHouse>().eq("goods_id",orderRequest.getGoodsId()));
+            int count  =  storeHouse.getCount() -1 ;
+            storeHouse.setCount(count);
+            storeHouse.setUt(new Date());
+            storeHouseService.updateById(storeHouse);
+
+            if(goods == null){
+                log.info("没有商品了！");
+            }
+
+            BigDecimal b1 = new BigDecimal(goods.getPrice().toString());
+            BigDecimal b2 = new BigDecimal(orderRequest.getNum().toString());
+            BigDecimal sum = b1.multiply(b2);
+
+            OrderRecords orderRecords = new OrderRecords();
+            orderRecords.setAddressId(String.valueOf(orderRequest.getAddressId()));
+            orderRecords.setOpenid(orderRequest.getOpenid());
+            orderRecords.setState(GoodsStatus.pay);
+            orderRecords.setSumPrice(sum);
+            orderRecords.setOrdercode(orderCode);
+            orderRecords.setCt(new Date());
+            orderRecords.setUt(new Date());
+            orderRecords.setType(2);
+
+            orderRecordsService.insert(orderRecords);
+
+            OrderRecordsDetails orderRecordsDetails = new OrderRecordsDetails();
+            orderRecordsDetails.setCt(new Date());
+            orderRecordsDetails.setGoodsId(goods.getId());
+            orderRecordsDetails.setNum(orderRequest.getNum());
+            orderRecordsDetails.setOrderId(orderRecords.getId());
+            orderRecordsDetails.setPrice(goods.getPrice());
+            orderRecordsDetails.setUt(new Date());
+            orderRecordsDetailsService.insert(orderRecordsDetails);
+            //String content = this.getOrderInfo(orderRecords);
+            //mailService.sendHtmlMail(mailUrl, "支付完成等待发货->订单号："+orderCode, content);
+
+
+
+
     }
 }

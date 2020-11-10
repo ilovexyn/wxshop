@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
 /**
- * <p>
- * InnoDB free: 9216 kB 前端控制器
- * </p>
- *
+ *  购物车控制器
  * @author Wangjie
  * @since 2019-09-25
  */

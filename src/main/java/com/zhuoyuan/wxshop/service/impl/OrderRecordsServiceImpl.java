@@ -7,6 +7,7 @@ import com.zhuoyuan.wxshop.dto.CarShopDetailDto;
 import com.zhuoyuan.wxshop.dto.GetOrderDetailRequest;
 import com.zhuoyuan.wxshop.dto.GetOrderRequest;
 import com.zhuoyuan.wxshop.dto.OrderRequest;
+import com.zhuoyuan.wxshop.lock.ShopLock;
 import com.zhuoyuan.wxshop.mapper.CarShopMapper;
 import com.zhuoyuan.wxshop.model.*;
 import com.zhuoyuan.wxshop.mapper.OrderRecordsMapper;
@@ -30,6 +31,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * <p>
@@ -245,8 +248,10 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
     }
 
     @Override
-    public  synchronized void offlinePool(OrderRequest orderRequest) throws Exception{
+    public   void offlinePool(OrderRequest orderRequest)  {
 
+        ShopLock.addLock().lock();
+        try{
             System.out.println(System.currentTimeMillis());
             log.info("OrderRecordsServiceImpl -- save:"+JSONObject.toJSONString(orderRequest));
             SnowFlake snowFlake = new SnowFlake(2, 9);
@@ -290,9 +295,10 @@ public class OrderRecordsServiceImpl extends ServiceImpl<OrderRecordsMapper, Ord
             orderRecordsDetailsService.insert(orderRecordsDetails);
             //String content = this.getOrderInfo(orderRecords);
             //mailService.sendHtmlMail(mailUrl, "支付完成等待发货->订单号："+orderCode, content);
-
-
-
-
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            ShopLock.addLock().unlock();
+        }
     }
 }

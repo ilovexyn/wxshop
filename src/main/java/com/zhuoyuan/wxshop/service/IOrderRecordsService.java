@@ -26,5 +26,5 @@ public interface IOrderRecordsService extends IService<OrderRecords> {
 
     void createCarShopOrder ( CreateCarShopOrderRequest carShopPageRequest) throws  Exception;
 
-    void offlinePool(OrderRequest orderRequest) throws Exception;
+    void offlinePool(OrderRequest orderRequest)  ;
 }

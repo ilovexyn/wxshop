@@ -3,11 +3,14 @@ package com.zhuoyuan.wxshop.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.zhuoyuan.wxshop.request.Result;
 import com.zhuoyuan.wxshop.service.WXService;
+import com.zhuoyuan.wxshop.utils.PictureUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,15 +60,32 @@ public class WxController {
         return   Result.success(wxService.login(code));
     }
 
+//    @GetMapping(value = "/getPic")
+//    public String getWxuser(){
+//        return  PictureUtils.GetImageStr("D:\\2.png");
+//    }
+//
+//    @GetMapping(value = "/getPic2")
+//    public String getWxuser(){
+//        return  PictureUtils.GenerateImage("D:\\2.png");
+//    }
+
+    public static void a (){
+        String a = new String("ab"); // a 为一个引用
+        String b = new String("ab"); // b为另一个引用,对象的内容一样
+        String aa = "ab"; // 放在常量池中
+        String bb = "ab"; // 从常量池中查找
+
+            System.out.println(aa==bb);
+            System.out.println(a==b);
+            System.out.println(a.equals(b));
+            System.out.println(42 == 42.0);
+
+
+    }
+
+
     public static void main(String[] args) {
-         final Map<String,String> map = new HashMap<String,String>();
-         Map<String,String> map2 = new HashMap<String,String>();
-        map.put("1","1");
-        map2.put("2","2");
-
-
-
-        System.out.println();
-
+        WxController.a();
     }
 }

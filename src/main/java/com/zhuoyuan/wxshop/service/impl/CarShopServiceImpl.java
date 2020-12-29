@@ -73,9 +73,9 @@ public class CarShopServiceImpl extends ServiceImpl<CarShopMapper, CarShop> impl
             for(CarShop carShop:carShopList){
                 CarShopDetailDto carShopDetailDto = new CarShopDetailDto();
                 Goods goods = goodsService.selectById(carShop.getGoodId());
-                //String imageurl = ossUtil.getURL(goods.getImageurl()).toString();
+                String imageurl = ossUtil.getURL(goods.getImageurl()).toString();
                 carShopDetailDto.setGoodId(goods.getId());
-                //carShopDetailDto.setImageurl(imageurl);
+                carShopDetailDto.setImageurl(imageurl);
                 carShopDetailDto.setName(goods.getName());
                 carShopDetailDto.setPrice(goods.getPrice());
                 carShopDetailDto.setNum(carShop.getNum());
@@ -142,7 +142,7 @@ public class CarShopServiceImpl extends ServiceImpl<CarShopMapper, CarShop> impl
                 carShopOrderDetailDto.setNum(carShop.getNum());
                 carShopOrderDetailDto.setPrice(goods.getPrice());
                 carShopOrderDetailDto.setGoodName(goods.getName());
-                //carShopOrderDetailDto.setImageUrl(ossUtil.getURL(goods.getImageurl()).toString());
+                carShopOrderDetailDto.setImageUrl(ossUtil.getURL(goods.getImageurl()).toString());
                 carShopOrderDetailDtoList.add(carShopOrderDetailDto);
                 sum = sum.add(goods.getPrice().multiply(new BigDecimal(carShop.getNum())));
             }

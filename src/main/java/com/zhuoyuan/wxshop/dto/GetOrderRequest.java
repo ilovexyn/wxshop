@@ -11,4 +11,5 @@ public class GetOrderRequest extends OrderRecords {
     private Integer goodsCount;
     private Integer state;
     private List<GetOrderDetailRequest> getOrderDetailRequestList;
+    private String addressInfo;
 }
